@@ -3,10 +3,10 @@ Library/
 Logs/
 Packages/
 Temp/
+obj/
 UserSettings/
 Builds/
-Assets/src/Map Generation/Art_Inspiration
-*.png~
-*.kra~
-*.kra
-*.kra.meta
+Assets/
+
+Assets/Presets/
+Assets/TextMesh Pro/
