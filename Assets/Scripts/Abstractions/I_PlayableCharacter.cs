@@ -9,14 +9,10 @@ using UnityEngine.InputSystem;
  */
 public interface I_PlayableCharacter
 {
-  //Members
-  PlayableCharacterSettings characterSettings { get; set; }
-
   //Methods
   void OnPrimaryAbilityAction(InputAction.CallbackContext context);
 
   void OnSecondaryAbilityAction(InputAction.CallbackContext context);
 
   void RecieveDamage(float damage, Constants.ElementTypes elemType);
-  void InitSettings();
 }

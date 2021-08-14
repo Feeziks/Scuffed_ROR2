@@ -13,8 +13,8 @@ public class SO_CharacterData : ScriptableObject
   //Character Animations
 
   //Character Settings
-  public PlayableCharacterSettings characterSettings;
+  public SO_PlayableCharacterSettings characterSettings;
 
   //Character Abilities
-  public List<AbilityTree> characterAbilities;
+  public List<SO_AbilityTree> characterAbilities;
 }
