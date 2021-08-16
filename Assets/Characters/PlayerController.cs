@@ -16,15 +16,16 @@ public class PlayerController : MonoBehaviour
   private int availableJumps;
   private float jumpTimer;
   private float minTimeBetweenJumps = 0.5f;
+  private float timeToJumpApex = 0.5f;
   private bool grounded;
-  private float groundedOffset = -0.5f;
-  private float groundedRadius = 1f;
+  private float groundedOffset = -0.15f; //TODO better way to do this other than guess and check
+  private float groundedRadius = 0.8f;
   public LayerMask groundLayers;
 
   //Velocities
   private float verticalVelocity;
-  private float gravity = -20f;
-  private float terminalVelocity = -50.0f;
+  private float gravity = -50f;
+  private float terminalVelocity = -300.0f;
 
   //Health / status
   private float currHealth;
@@ -36,6 +37,9 @@ public class PlayerController : MonoBehaviour
   private void Awake()
   {
     jumpTimer = Time.realtimeSinceStartup;
+
+    groundedOffset *= transform.localScale.y / 3;
+    groundedRadius *= transform.localScale.magnitude;
   }
 
   private void Start()
@@ -77,9 +81,19 @@ public class PlayerController : MonoBehaviour
     {
       jumpTimer = Time.realtimeSinceStartup;
 
-      //Apply Velocity to reach the jump height && cancel any neg velocity we had before
+      //Apply Velocity to reach the jump height && cancel any vertical velocity we had before
       verticalVelocity = 0f;
-      verticalVelocity = Mathf.Sqrt(characterData.characterSettings.baseJumpHeight * -2f * gravity);
+      //Desired height = s
+      //initial velocity = u
+      //v = 0
+      //a = gravity
+      //t = apex jump
+      //s = u*t + (at^2)/2
+      //s - (at^2)/2 = ut
+      //(s - (at^2)/2)t = u
+      //verticalVelocity = (characterData.characterSettings.baseJumpHeight - (gravity * timeToJumpApex * timeToJumpApex) / 2f) / timeToJumpApex;
+      //verticalVelocity = Mathf.Sqrt(-2.0f * gravity * characterData.characterSettings.baseJumpHeight);
+      verticalVelocity = characterData.characterSettings.baseJumpHeight / timeToJumpApex - ((gravity * timeToJumpApex) / 2f);
       availableJumps -= 1;
       inputs.jump = false;
     }
@@ -93,6 +107,7 @@ public class PlayerController : MonoBehaviour
   {
     if (verticalVelocity >= terminalVelocity)
     {
+      verticalVelocity += gravity * Time.fixedDeltaTime;
       verticalVelocity += gravity * Time.fixedDeltaTime;
     }
   }
@@ -108,10 +123,21 @@ public class PlayerController : MonoBehaviour
     if (asdf != 0)
       grounded = true;
 
-    if(grounded)
+    if(grounded && (Time.realtimeSinceStartup - jumpTimer) > Time.fixedDeltaTime * 5)
     {
       availableJumps = characterData.characterSettings.baseNumberJumps;
     }
+  }
+
+  private void OnDrawGizmosSelected()
+  {
+    GroundedCheckGizmos();
+  }
+
+  private void GroundedCheckGizmos()
+  {
+    Gizmos.color = Color.white;
+    Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
   }
 
   private void Move()

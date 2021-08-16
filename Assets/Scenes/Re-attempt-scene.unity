@@ -694,7 +694,7 @@ MonoBehaviour:
   inputs: {fileID: 1422962637}
   groundLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 310
 --- !u!143 &1422962636
 CharacterController:
   m_ObjectHideFlags: 0

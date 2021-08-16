@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseMoveSpeed: 15
   baseSprintSpeedMultiplier: 2.5
-  baseJumpHeight: 30
+  baseJumpHeight: 300
   baseNumberJumps: 2
   baseHealth: 100
   baseArmor: 10
