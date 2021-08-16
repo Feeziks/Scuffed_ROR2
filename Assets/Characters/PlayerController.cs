@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class PlayerController : MonoBehaviour
   public InputHandler inputs;
 
   //Private Members
-  //Dictionary<ItemID, int> itemInventory;
+  SortedDictionary<Constants.ItemID, int> itemInventory;
 
   //Jumping / grounded
   private int availableJumps;
@@ -31,6 +33,10 @@ public class PlayerController : MonoBehaviour
   private float currHealth;
   private Constants.Status status;
 
+  //UI
+  public GameObject spriteStorage;
+  public Sprite temporary;
+
   //Public Methods
 
   //Private Methods
@@ -44,7 +50,8 @@ public class PlayerController : MonoBehaviour
 
   private void Start()
   {
-    
+    itemInventory = new SortedDictionary<Constants.ItemID, int>();
+    InitializeItemInventory();
   }
 
   private void Update()
@@ -65,6 +72,7 @@ public class PlayerController : MonoBehaviour
     //CameraRotation();
   }
 
+  #region Movement / Control
   private void Jump()
   {
     if(grounded)
@@ -92,8 +100,8 @@ public class PlayerController : MonoBehaviour
       //s - (at^2)/2 = ut
       //(s - (at^2)/2)t = u
       //verticalVelocity = (characterData.characterSettings.baseJumpHeight - (gravity * timeToJumpApex * timeToJumpApex) / 2f) / timeToJumpApex;
-      //verticalVelocity = Mathf.Sqrt(-2.0f * gravity * characterData.characterSettings.baseJumpHeight);
-      verticalVelocity = characterData.characterSettings.baseJumpHeight / timeToJumpApex - ((gravity * timeToJumpApex) / 2f);
+      verticalVelocity = Mathf.Sqrt(-2.0f * gravity * characterData.characterSettings.baseJumpHeight);
+      //verticalVelocity = characterData.characterSettings.baseJumpHeight / timeToJumpApex - ((gravity * timeToJumpApex) / 2f);
       availableJumps -= 1;
       inputs.jump = false;
     }
@@ -144,4 +152,63 @@ public class PlayerController : MonoBehaviour
   {
     controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.fixedDeltaTime);
   }
+
+  #endregion
+
+  #region Items And Item Interactions
+  public void OnItemPickup(Constants.ItemID item)
+  {
+    //Add the item to our inventory
+    itemInventory[item] += 1;
+
+    UpdateItemDisplay();
+    UpdateCharacterStats();
+  }
+
+  private void UpdateItemDisplay()
+  {
+    // Update the sprites displayed in the UI if necessary + the number of that item owned
+    foreach(KeyValuePair<Constants.ItemID, int> kvp in itemInventory)
+    {
+      if(kvp.Value == 1)
+      {
+        //Display the sprite in the UI
+        //TODO: Need some kind of ItemID to ItemPrefab LUT
+        //TODO: Check if there is an Image component associate with this Item already? Just make sure we are erases and rebuilding this list every time we get a new item
+        //Better to just check the images that are already there and update from there? idk
+        spriteStorage.GetComponent<Image>().sprite = temporary;
+      }
+      else if(kvp.Value > 1)
+      {
+        //Dispaly the sprite and a number showing how many are owned
+      }
+    }
+
+  }
+
+  private void UpdateCharacterStats()
+  {
+
+  }
+
+  #endregion
+
+  #region Helper functions
+  private void InitializeItemInventory()
+  {
+    //Initialize each itemID into the sorted dictionary in order, this way we can be ensured that the items always display / read out in the same order every time
+    //Regardless of order that the player obtains the items
+    
+    //TODO: Get every valid ItemID - Create an entry in this sorted dict with that ID having 0 instances
+    for(int i = 0; i < Constants.startAndEndOfItemIDByRarirty.GetLength(1); i++)
+    {
+      for (uint j = Constants.startAndEndOfItemIDByRarirty[0,i].ID; j <= Constants.startAndEndOfItemIDByRarirty[1,i].ID; j++)
+      {
+        Constants.ItemID thisID = new Constants.ItemID(j);
+        itemInventory[thisID] = 0;
+      }
+    }
+  }
+
+  #endregion
 }
