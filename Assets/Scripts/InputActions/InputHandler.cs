@@ -32,6 +32,9 @@ public class InputHandler : MonoBehaviour
   {
     if(context.started)
       sprint = true;
+
+    if (context.canceled)
+      sprint = false;
   }
 
   public void OnReset(InputAction.CallbackContext context)

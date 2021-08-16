@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour
   public CharacterController controller;
   public SO_CharacterData characterData;
   public InputHandler inputs;
+  public Camera mainCamera;
 
   //Private Members
   SortedDictionary<Constants.ItemID, int> itemInventory;
 
   //Jumping / grounded
+  public LayerMask groundLayers;
   private int availableJumps;
   private float jumpTimer;
   private float minTimeBetweenJumps = 0.5f;
@@ -22,12 +24,20 @@ public class PlayerController : MonoBehaviour
   private bool grounded;
   private float groundedOffset = -0.15f; //TODO better way to do this other than guess and check
   private float groundedRadius = 0.8f;
-  public LayerMask groundLayers;
+  
 
   //Velocities
   private float verticalVelocity;
+  private float velocity;
   private float gravity = -50f;
   private float terminalVelocity = -300.0f;
+  private float currWalkVelocity;
+  private float currSprintVelocity;
+
+  //Rotations
+  private float targetRotation;
+  private float rotationVelocity;
+  private float rotationSmoothTime = 0.12f;
 
   //Health / status
   private float currHealth;
@@ -52,6 +62,7 @@ public class PlayerController : MonoBehaviour
   {
     itemInventory = new SortedDictionary<Constants.ItemID, int>();
     InitializeItemInventory();
+    UpdateCharacterStats();
   }
 
   private void Update()
@@ -150,7 +161,40 @@ public class PlayerController : MonoBehaviour
 
   private void Move()
   {
-    controller.Move(new Vector3(0.0f, verticalVelocity, 0.0f) * Time.fixedDeltaTime);
+    //Get target velocity based on sprinting or not
+    float targetVelocity = inputs.sprint ? currSprintVelocity : currWalkVelocity;
+    if (inputs.move == Vector2.zero)
+      targetVelocity = 0.0f;
+
+    float velocityOffset = 0.1f;
+    float currentHorizontalVelocity = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+
+    float inputMagnitude = inputs.analogMovement ? inputs.move.magnitude : 1.0f;
+
+    //Acceleration or decall to target vel
+    if (currentHorizontalVelocity < targetVelocity - velocityOffset || currentHorizontalVelocity > targetVelocity + velocityOffset)
+    {
+      velocity = Mathf.Lerp(currentHorizontalVelocity, targetVelocity * inputMagnitude, Time.fixedDeltaTime * characterData.characterSettings.baseAccelerationRate);
+      velocity = Mathf.Round(velocity * 1000f) / 1000f;
+    }
+    else
+    {
+      velocity = targetVelocity;
+    }
+
+    Vector3 inputDirection = new Vector3(inputs.move.x, 0.0f, inputs.move.y).normalized;
+    
+    if(inputs.move != Vector2.zero)
+    {
+      targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+      float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSmoothTime);
+
+      transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+    }
+
+    Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+
+    controller.Move(targetDirection.normalized * (velocity * Time.fixedDeltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.fixedDeltaTime);
   }
 
   #endregion
@@ -188,7 +232,8 @@ public class PlayerController : MonoBehaviour
 
   private void UpdateCharacterStats()
   {
-
+    currWalkVelocity = characterData.characterSettings.baseMoveSpeed;
+    currSprintVelocity = characterData.characterSettings.baseMoveSpeed * characterData.characterSettings.baseSprintSpeedMultiplier;
   }
 
   #endregion

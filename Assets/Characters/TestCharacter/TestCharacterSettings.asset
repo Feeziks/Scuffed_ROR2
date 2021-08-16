@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b07eea07349b244a8504a7d5f53d93d, type: 3}
   m_Name: TestCharacterSettings
   m_EditorClassIdentifier: 
-  baseMoveSpeed: 15
+  baseMoveSpeed: 200
   baseSprintSpeedMultiplier: 2.5
-  baseJumpHeight: 300
+  baseAccelerationRate: 50
+  baseJumpHeight: 150
   baseNumberJumps: 2
   baseHealth: 100
   baseArmor: 10

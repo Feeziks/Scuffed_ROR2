@@ -8,6 +8,7 @@ public class SO_PlayableCharacterSettings : ScriptableObject
   //Movement
   public float baseMoveSpeed;
   public float baseSprintSpeedMultiplier;
+  public float baseAccelerationRate;
   public float baseJumpHeight;
   public int   baseNumberJumps;
   //Defense
