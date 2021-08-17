@@ -10,7 +10,7 @@ public class SO_Item : ScriptableObject
   public string shortDescription;
   public string longDescription;
 
-  public GameObject model;
+  public Mesh model;
   public Sprite sprite;
 
   //TODO: How to store something that says what this item will modify? I.E. this item affects move speed / attack speed etc.

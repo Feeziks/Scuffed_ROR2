@@ -5,12 +5,13 @@ public static class Constants
 {
   public enum ElementTypes
   {
-    Fire,
-    Water,
-    Earth,
-    Air,
-    Electric,
-    None
+    Fire = 0b1,
+    Water = 0b10,
+    Earth = 0b100,
+    Air = 0b1000,
+    Electric = 0b10000,
+    None = 0b100000,
+    NUM_ELEMENTS = 6 //Counter / number of all element types above
   }
 
   public enum Status

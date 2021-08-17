@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
   public Camera mainCamera;
 
   //Private Members
-  SortedDictionary<Constants.ItemID, int> itemInventory;
+  private SortedDictionary<Constants.ItemID, int> itemInventory;
+
+  private ModifiedSettings modSettings;
 
   //Jumping / grounded
   public LayerMask groundLayers;
@@ -24,12 +26,15 @@ public class PlayerController : MonoBehaviour
   private bool grounded;
   private float groundedOffset = -0.15f; //TODO better way to do this other than guess and check
   private float groundedRadius = 0.8f;
-  
+  private float currJumpHeight;
+
 
   //Velocities
   private float verticalVelocity;
   private float velocity;
-  private float gravity = -50f;
+  public float gravity = -25f;
+  public float fallingGravity = -175.0f;
+  public float baseGravity = -25f;
   private float terminalVelocity = -300.0f;
   private float currWalkVelocity;
   private float currSprintVelocity;
@@ -61,6 +66,7 @@ public class PlayerController : MonoBehaviour
   private void Start()
   {
     itemInventory = new SortedDictionary<Constants.ItemID, int>();
+    modSettings = new ModifiedSettings();
     InitializeItemInventory();
     UpdateCharacterStats();
   }
@@ -102,17 +108,7 @@ public class PlayerController : MonoBehaviour
 
       //Apply Velocity to reach the jump height && cancel any vertical velocity we had before
       verticalVelocity = 0f;
-      //Desired height = s
-      //initial velocity = u
-      //v = 0
-      //a = gravity
-      //t = apex jump
-      //s = u*t + (at^2)/2
-      //s - (at^2)/2 = ut
-      //(s - (at^2)/2)t = u
-      //verticalVelocity = (characterData.characterSettings.baseJumpHeight - (gravity * timeToJumpApex * timeToJumpApex) / 2f) / timeToJumpApex;
-      verticalVelocity = Mathf.Sqrt(-2.0f * gravity * characterData.characterSettings.baseJumpHeight);
-      //verticalVelocity = characterData.characterSettings.baseJumpHeight / timeToJumpApex - ((gravity * timeToJumpApex) / 2f);
+      verticalVelocity = currJumpHeight / (1f / timeToJumpApex);
       availableJumps -= 1;
       inputs.jump = false;
     }
@@ -127,11 +123,11 @@ public class PlayerController : MonoBehaviour
     //Cause player to fall faster when they reach the apex of the jump
     if (!grounded && verticalVelocity <= 0)
     {
-      gravity = -100f;
+      gravity = fallingGravity;
     }
     else
     {
-      gravity = -50f;
+      gravity = baseGravity;
     }
 
     if (verticalVelocity >= terminalVelocity)
@@ -232,8 +228,17 @@ public class PlayerController : MonoBehaviour
 
   private void UpdateCharacterStats()
   {
-    currWalkVelocity = characterData.characterSettings.baseMoveSpeed;
-    currSprintVelocity = characterData.characterSettings.baseMoveSpeed * characterData.characterSettings.baseSprintSpeedMultiplier;
+    //TODO implement how items will change these settings
+    modSettings.maxHealth = characterData.characterSettings.baseHealth + 0;
+    modSettings.healthRegen = 0f;
+    modSettings.moveSpeed = characterData.characterSettings.baseMoveSpeed + 0;
+    modSettings.sprintMultiplier = characterData.characterSettings.baseSprintSpeedMultiplier + 0;
+    modSettings.jumpHeight = characterData.characterSettings.baseJumpHeight + 0;
+    modSettings.numJumps = characterData.characterSettings.baseNumberJumps + 0;
+
+    currWalkVelocity = modSettings.moveSpeed;
+    currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
+    currJumpHeight = modSettings.jumpHeight;
   }
 
   #endregion

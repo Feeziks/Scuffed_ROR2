@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Abstractions\SO_CharacterData.cs" />
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scripts\Abstractions\ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\ModifiedSettings.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
