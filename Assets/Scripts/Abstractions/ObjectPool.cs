@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class ObjectPool<T> where T : class, new()
 {
   //The "pool"
-  [SerializeField] private Stack<T> pool = new Stack<T>(initialDepth);
+  private Stack<T> pool = new Stack<T>(initialDepth);
   private static int initialDepth = 1024;
   private int currentDepth;
 

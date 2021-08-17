@@ -67,15 +67,15 @@ public class PlayerController : MonoBehaviour
 
   private void Update()
   {
-    
-  }
-
-  private void FixedUpdate()
-  {
     GroundedCheck();
     Gravity();
     Jump();
     Move();
+  }
+
+  private void FixedUpdate()
+  {
+
   }
 
   private void LateUpdate()
@@ -124,10 +124,20 @@ public class PlayerController : MonoBehaviour
 
   private void Gravity()
   {
+    //Cause player to fall faster when they reach the apex of the jump
+    if (!grounded && verticalVelocity <= 0)
+    {
+      gravity = -100f;
+    }
+    else
+    {
+      gravity = -50f;
+    }
+
     if (verticalVelocity >= terminalVelocity)
     {
-      verticalVelocity += gravity * Time.fixedDeltaTime;
-      verticalVelocity += gravity * Time.fixedDeltaTime;
+      verticalVelocity += gravity * Time.deltaTime;
+      verticalVelocity += gravity * Time.deltaTime;
     }
   }
 
@@ -137,12 +147,12 @@ public class PlayerController : MonoBehaviour
     Vector3 sphereCenterPosition = new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
     grounded = Physics.CheckSphere(sphereCenterPosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
     Collider[] temp = new Collider[10];
-    int asdf = Physics.OverlapSphereNonAlloc(sphereCenterPosition, groundedRadius, temp, groundLayers, QueryTriggerInteraction.Ignore);
+    int test = Physics.OverlapSphereNonAlloc(sphereCenterPosition, groundedRadius, temp, groundLayers, QueryTriggerInteraction.Ignore);
 
-    if (asdf != 0)
+    if (test != 0)
       grounded = true;
 
-    if(grounded && (Time.realtimeSinceStartup - jumpTimer) > Time.fixedDeltaTime * 5)
+    if(grounded && (Time.realtimeSinceStartup - jumpTimer) > Time.deltaTime * 5)
     {
       availableJumps = characterData.characterSettings.baseNumberJumps;
     }
@@ -174,7 +184,7 @@ public class PlayerController : MonoBehaviour
     //Acceleration or decall to target vel
     if (currentHorizontalVelocity < targetVelocity - velocityOffset || currentHorizontalVelocity > targetVelocity + velocityOffset)
     {
-      velocity = Mathf.Lerp(currentHorizontalVelocity, targetVelocity * inputMagnitude, Time.fixedDeltaTime * characterData.characterSettings.baseAccelerationRate);
+      velocity = Mathf.Lerp(currentHorizontalVelocity, targetVelocity * inputMagnitude, Time.deltaTime * characterData.characterSettings.baseAccelerationRate);
       velocity = Mathf.Round(velocity * 1000f) / 1000f;
     }
     else
@@ -182,19 +192,9 @@ public class PlayerController : MonoBehaviour
       velocity = targetVelocity;
     }
 
-    Vector3 inputDirection = new Vector3(inputs.move.x, 0.0f, inputs.move.y).normalized;
-    
-    if(inputs.move != Vector2.zero)
-    {
-      targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-      float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref rotationVelocity, rotationSmoothTime);
+    Vector3 targetDirection = new Vector3(inputs.move.x, 0.0f, inputs.move.y);
 
-      transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-    }
-
-    Vector3 targetDirection = Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
-
-    controller.Move(targetDirection.normalized * (velocity * Time.fixedDeltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.fixedDeltaTime);
+    controller.Move(targetDirection.normalized * (velocity * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
   }
 
   #endregion
