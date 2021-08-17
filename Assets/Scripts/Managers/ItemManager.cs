@@ -15,12 +15,19 @@ public class ItemManager : MonoBehaviour
   //Either one large collection of every item and we can control which rarity / type we pick from there 
   //Or seperate collections for each one of those - either way we need the data
 
+  public ObjectPool<Item> itemPool;
+
   private void Awake()
   {
-
+    itemPool = new ObjectPool<Item>();
   }
 
   private void Start()
+  {
+    
+  }
+
+  private void Update()
   {
     
   }
