@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
+  m_Name: TestUncommonItem
+  m_EditorClassIdentifier: 
+  itemName: UncommonItemTest
+  ID:
+    ID: 256
+  shortDescription: An uconnom item to test
+  longDescription: Testing uncommon Items
+  model: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 4eb764204af58bf4f84ea8243c2801d3, type: 3}
+  firstStackModifier: 2
+  additionalStackModifier: 2
