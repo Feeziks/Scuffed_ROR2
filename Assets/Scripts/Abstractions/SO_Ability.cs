@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Ability
+[CreateAssetMenu(menuName = "Scriptable Objects/Ability")]
+public class SO_Ability : ScriptableObject
 {
   // Public Members
   public string abilityName;
@@ -18,6 +18,8 @@ public class Ability
   public float cost; //Not really sure if we need this
 
   public bool passive; //True = passive ; false = active
+
+  public float procCoefficent;
 
   //TODO: How to store *what* the ability does?
   

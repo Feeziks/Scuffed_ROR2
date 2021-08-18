@@ -33,6 +33,26 @@ public static class Constants
   }
 
   [System.Serializable]
+  public enum StatItemModifies
+  {
+    moveSpeed         = 0b0000000000000000,
+    sprintMultiplier  = 0b0000000000000001,
+    jumpHeight        = 0b0000000000000010,
+    numJumps          = 0b0000000000000100,
+    maxHealth         = 0b0000000000001000,
+    healthRegen       = 0b0000000000010000,
+    armor             = 0b0000000000100000,
+    fireResist        = 0b0000000001000000,
+    waterResist       = 0b0000000010000000,
+    earthResist       = 0b0000000100000000,
+    airResist         = 0b0000001000000000,
+    electricResist    = 0b0000010000000000,
+    attackSpeed       = 0b0000100000000000,
+    damage            = 0b0001000000000000,
+    dodgeChance       = 0b0010000000000000
+  }
+
+  [System.Serializable]
   public class ItemID : IComparable
   {
     public uint ID; //uint is a 32-bit value

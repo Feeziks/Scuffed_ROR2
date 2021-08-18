@@ -7,7 +7,27 @@ public class Item
   public SO_Item so_item;
 
   public ParticleSystem particleSystem;
-  public Collider collider;
+  public SphereCollider collider;
+
+  public Item()
+  {
+    //Create the particle system
+
+    //Create the gameobject
+
+
+    //Create the sphere collider
+    collider = new SphereCollider();
+    collider.center = Vector3.zero;
+    collider.radius = 2f;
+    collider.enabled = true;
+    collider.isTrigger = true;
+  }
+
+  public void SetSO_Item(SO_Item s)
+  {
+    so_item = s;
+  }
 
   /*
   private void OnTriggerEnter(Collider other)

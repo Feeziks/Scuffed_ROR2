@@ -8,7 +8,7 @@ public class SO_AbilityTree : ScriptableObject
   [System.Serializable]
   public class Node2
   {
-    public Ability ability;
+    public SO_Ability ability;
     public List<Node2> children;
 
     public Node2()

@@ -13,8 +13,13 @@ public class SO_Item : ScriptableObject
   public Mesh model;
   public Sprite sprite;
 
-  //TODO: How to store something that says what this item will modify? I.E. this item affects move speed / attack speed etc.
-
+  //TRUE = does modify stats , FALSE = does something else
+  public bool modifiesStats;
+  public Constants.StatItemModifies statModifier;
   public float firstStackModifier;
   public float additionalStackModifier;
+
+  //TODO: How to store what this item does other than stat modification
+  //I.E. on hit enemy fire a missle etc
+  public float procCoefficent;
 }
