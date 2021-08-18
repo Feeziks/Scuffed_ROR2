@@ -11,15 +11,17 @@ public class ItemManager : MonoBehaviour
   //The item within the chest should probably be determined when the chest is created - less overhead at time of opening chest? idk if that reall is a performance change at all
   //But that is likely important so that seeds can remain consistent across every game
 
-  //TODO: Script needs some kind of collections of items
-  //Either one large collection of every item and we can control which rarity / type we pick from there 
-  //Or seperate collections for each one of those - either way we need the data
-
   public ObjectPool<Item> itemPool;
+
+  private Dictionary<Constants.ItemRarity, List<SO_Item>> itemsByRarity;
+  private List<SO_Item> allEquipments;
 
   private void Awake()
   {
     itemPool = new ObjectPool<Item>();
+    itemsByRarity = new Dictionary<Constants.ItemRarity, List<SO_Item>>();
+    allEquipments = new List<SO_Item>();
+    LoadAllItems();
   }
 
   private void Start()
@@ -37,6 +39,30 @@ public class ItemManager : MonoBehaviour
   {
     //For now we just want to spawn the test items to show that they work
 
+  }
+
+  private void LoadAllItems()
+  {
+    Object[] allItems = Resources.LoadAll("Items", typeof(SO_Item));
+
+    foreach(Constants.ItemRarity key in System.Enum.GetValues(typeof(Constants.ItemRarity)))
+    {
+      itemsByRarity[key] = new List<SO_Item>();
+    }
+    
+    //Put the items into the correct dictionary
+    foreach(Object item in allItems)
+    {
+      SO_Item itemCasted = (SO_Item)item;
+      if(itemCasted.ID.IsEquipment())
+      {
+        allEquipments.Add(itemCasted);
+      }
+      else
+      {
+        itemsByRarity[itemCasted.ID.GetRarity()].Add(itemCasted);
+      }
+    }
   }
 
 }

@@ -37,18 +37,17 @@ public static class Constants
   {
     public uint ID; //uint is a 32-bit value
 
-    private static uint activeMask = activeBitWidth << activeBitShift;
     private static uint activeBitWidth = 0b1;
     private static int activeBitShift = 11;
+    private static uint activeMask = activeBitWidth << activeBitShift;
 
-    private static uint rarityMask = rarityBitWidth << rarityBitShift;
     private static uint rarityBitWidth = 0b111;
     private static int rarityBitShift = 8;
+    private static uint rarityMask = rarityBitWidth << rarityBitShift;
 
-    private static uint uniqueIDMask = uniqueIDBitWidth << uniqueIDBitShift; //TODO: Think of a better name for this
     private static uint uniqueIDBitWidth = 0b11111111;
     private static int uniqueIDBitShift = 0;
-
+    private static uint uniqueIDMask = uniqueIDBitWidth << uniqueIDBitShift; //TODO: Think of a better name for this
 
     public ItemID()
     {
@@ -73,6 +72,10 @@ public static class Constants
 
     public ItemRarity GetRarity()
     {
+      int temp = (int)(ID & rarityMask);
+      temp = temp >> rarityBitShift;
+      ItemRarity temp2 = (ItemRarity)temp;
+
       return (ItemRarity)((ID & rarityMask) >> rarityBitShift);
     }
 
