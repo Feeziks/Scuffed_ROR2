@@ -6,13 +6,13 @@ public class Item : MonoBehaviour
 {
   public SO_Item so_item;
 
-  public ParticleSystem particleSystem;
-  public SphereCollider collider;
+  public ParticleSystem ps;
+  public SphereCollider sc;
   public MeshRenderer meshRenderer;
   public MeshFilter meshFilter;
 
   private bool spawned;
-  private float rotationHz = 0.5f;
+  private float rotationHz = 1f;
 
   public void SetSO_Item(SO_Item s)
   {
@@ -30,8 +30,11 @@ public class Item : MonoBehaviour
     if (so_item == null)
       return false;
 
-    collider.enabled = true;
+    sc.enabled = true;
     meshRenderer.enabled = true;
+    ps.Stop();
+
+    spawned = true;
 
     return true;
   }
@@ -39,10 +42,11 @@ public class Item : MonoBehaviour
   public void ResetItem()
   {
     so_item = null;
-    particleSystem.Stop();
-    collider.enabled = false;
+    ps.Stop();
+    sc.enabled = false;
     meshRenderer.enabled = false;
     meshFilter.mesh = null;
+    spawned = false;
   }
 
 
@@ -58,7 +62,8 @@ public class Item : MonoBehaviour
   {
     if(spawned)
     {
-      transform.Rotate(transform.up, rotationHz / Time.deltaTime);
+      transform.Rotate(transform.up, 360f / (rotationHz / Time.deltaTime));
+      transform.position = new Vector3(transform.position.x, Mathf.Sin(Time.realtimeSinceStartup) * 3f + 30f, transform.position.z);
     }
   }
 

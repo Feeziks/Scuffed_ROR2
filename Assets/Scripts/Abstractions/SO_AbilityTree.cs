@@ -5,19 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Scriptable Objects/Ability Tree")]
 public class SO_AbilityTree : ScriptableObject
 {
-  [System.Serializable]
-  public class Node2
+  public class Node
   {
     public SO_Ability ability;
-    public List<Node2> children;
+    public List<Node> children;
 
-    public Node2()
+    public Node()
     {
       ability = null;
-      children = new List<Node2>();
+      children = new List<Node>();
     }
   }
 
   public string abilityTreeName;
-  public Node2 root;
+  public Node root;
 }

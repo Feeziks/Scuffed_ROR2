@@ -32,17 +32,17 @@ public class PlayerController : MonoBehaviour
   //Velocities
   private float verticalVelocity;
   private float velocity;
-  public float gravity = -25f;
-  public float fallingGravity = -175.0f;
-  public float baseGravity = -25f;
-  private float terminalVelocity = -300.0f;
+  public float gravity;
+  public float fallingGravity = -150.0f;
+  public float baseGravity = -30f;
+  private float terminalVelocity = -700.0f;
   private float currWalkVelocity;
   private float currSprintVelocity;
 
   //Rotations
   private float targetRotation;
   private float rotationVelocity;
-  private float rotationSmoothTime = 0.12f;
+  //private float rotationSmoothTime = 0.12f;
 
   //Health / status
   private float currHealth;
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
     itemInventory = new SortedDictionary<Constants.ItemID, int>();
     modSettings = new ModifiedSettings();
     InitializeItemInventory();
-    UpdateCharacterStats();
+    SetCharacterBaseStats();
   }
 
   private void Update()
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
     if(grounded && (Time.realtimeSinceStartup - jumpTimer) > Time.deltaTime * 5)
     {
-      availableJumps = characterData.characterSettings.baseNumberJumps;
+      availableJumps = modSettings.numJumps;
     }
   }
 
@@ -204,18 +204,26 @@ public class PlayerController : MonoBehaviour
     itemInventory[item.ID] += 1;
 
     UIManager.SendMessage("UpdateItemDisplay");
-    UpdateCharacterStats();
+    UpdateCharacterStatsOnItemPickup(item);
   }
 
-  private void UpdateCharacterStats()
+  private void UpdateCharacterStatsOnItemPickup(SO_Item item)
   {
-    //TODO implement how items will change these settings
-    modSettings.maxHealth = characterData.characterSettings.baseHealth + 0;
+    modSettings.ApplyItem(item, itemInventory[item.ID]);
+
+    currWalkVelocity = modSettings.moveSpeed;
+    currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
+    currJumpHeight = modSettings.jumpHeight;
+  }
+
+  private void SetCharacterBaseStats()
+  {
+    modSettings.maxHealth = characterData.characterSettings.baseHealth ;
     modSettings.healthRegen = 0f;
-    modSettings.moveSpeed = characterData.characterSettings.baseMoveSpeed + 0;
-    modSettings.sprintMultiplier = characterData.characterSettings.baseSprintSpeedMultiplier + 0;
-    modSettings.jumpHeight = characterData.characterSettings.baseJumpHeight + 0;
-    modSettings.numJumps = characterData.characterSettings.baseNumberJumps + 0;
+    modSettings.moveSpeed = characterData.characterSettings.baseMoveSpeed ;
+    modSettings.sprintMultiplier = characterData.characterSettings.baseSprintSpeedMultiplier;
+    modSettings.jumpHeight = characterData.characterSettings.baseJumpHeight;
+    modSettings.numJumps = characterData.characterSettings.baseNumberJumps;
 
     currWalkVelocity = modSettings.moveSpeed;
     currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;

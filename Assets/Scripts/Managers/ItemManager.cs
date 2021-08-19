@@ -58,6 +58,7 @@ public class ItemManager : MonoBehaviour
   {
     SO_Item randomItem = itemsByRarity[rarity][(int)Random.Range(0f, itemsByRarity[rarity].Count)];
     GameObject thisGo = itemPool.Get();
+    thisGo.SetActive(true);
     thisGo.transform.localScale = new Vector3(10, 10, 10);
     Item thisItem = thisGo.GetComponent(typeof(Item)) as Item;
     thisItem.SetSO_Item(randomItem);
@@ -134,8 +135,10 @@ public class ItemManager : MonoBehaviour
       i.so_item = null; //Only set the SO item when the item is spawned in
       i.meshRenderer = mr;
       i.meshFilter = mf;
-      i.collider = sc;
-      i.particleSystem = ps;
+      i.sc = sc;
+      i.ps = ps;
+
+      go.SetActive(false);
     }
   }
 

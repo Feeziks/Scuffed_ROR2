@@ -33,24 +33,26 @@ public static class Constants
   }
 
   [System.Serializable]
-  public enum StatItemModifies
+  [Flags] public enum StatItemModifies
   {
-    moveSpeed         = 0b0000000000000000,
-    sprintMultiplier  = 0b0000000000000001,
-    jumpHeight        = 0b0000000000000010,
-    numJumps          = 0b0000000000000100,
-    maxHealth         = 0b0000000000001000,
-    healthRegen       = 0b0000000000010000,
-    armor             = 0b0000000000100000,
-    fireResist        = 0b0000000001000000,
-    waterResist       = 0b0000000010000000,
-    earthResist       = 0b0000000100000000,
-    airResist         = 0b0000001000000000,
-    electricResist    = 0b0000010000000000,
-    attackSpeed       = 0b0000100000000000,
-    damage            = 0b0001000000000000,
-    dodgeChance       = 0b0010000000000000
-  }
+    none              = 0,
+    moveSpeed         = 1,
+    sprintMultiplier  = 2,
+    jumpHeight        = 4,
+    numJumps          = 8,
+    maxHealth         = 16,
+    healthRegen       = 32,
+    armor             = 64,
+    fireResist        = 128,
+    waterResist       = 256,
+    earthResist       = 512,
+    airResist         = 1024,
+    electricResist    = 2048,
+    attackSpeed       = 4096,
+    damage            = 8192,
+    critChance        = 16384,
+    dodgeChance       = 32768
+  }  //If this is edited must ALSO edit modified settings cs to match!!!!!!
 
   [System.Serializable]
   public class ItemID : IComparable
@@ -118,31 +120,4 @@ public static class Constants
         throw new ArgumentException("Object is no an ItemID");
     }
   }
-
-  //TODO: There must be a better way for us to do this
-  //This could be an X Y problem ?
-  //I am storing these values so that we can initialize our sorted dict inventory for each valid ItemID
-  //We need someway to get those ItemIDs and know what is valid. This quick and dirty solution solves that by just hardcoding them directly
-
-  public static ItemID firstCommonItem = new ItemID(0);
-  public static ItemID lastCommonItem = new ItemID(0);
-
-  public static ItemID firstUncommonItem = new ItemID(256);
-  public static ItemID lastUncommonItem = new ItemID(256);
-
-  public static ItemID firstRareItem = new ItemID(512);
-  public static ItemID lastRareItem = new ItemID(512);
-
-  public static ItemID firstLegendaryItem = new ItemID(768);
-  public static ItemID lastLegendaryItem = new ItemID(768);
-
-  public static ItemID firstDivineItem = new ItemID(1024);
-  public static ItemID lastDivineItem = new ItemID(1024);
-
-  public static ItemID firstEquipmentItem = new ItemID(2048);
-  public static ItemID lastEquipmentItem = new ItemID(2048);
-
-  public static ItemID[,] startAndEndOfItemIDByRarirty = new ItemID[,]{ { firstCommonItem, firstUncommonItem, firstRareItem, firstLegendaryItem, firstDivineItem, firstEquipmentItem }, 
-                                                                       { lastCommonItem, lastUncommonItem, lastRareItem, lastLegendaryItem, lastDivineItem, lastEquipmentItem } };
-
 }
