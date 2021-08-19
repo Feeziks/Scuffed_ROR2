@@ -17,7 +17,11 @@ MonoBehaviour:
     ID: 512
   shortDescription: Rare item for test
   longDescription: Testing of Rare Items
-  model: {fileID: 0}
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 0}
   sprite: {fileID: 21300000, guid: cb1f46d26aecd5046aaf941192c40330, type: 3}
+  modifiesStats: 0
+  statModifier: 0
   firstStackModifier: 3
   additionalStackModifier: 3
+  procCoefficent: 0

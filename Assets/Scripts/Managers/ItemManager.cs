@@ -11,17 +11,26 @@ public class ItemManager : MonoBehaviour
   //The item within the chest should probably be determined when the chest is created - less overhead at time of opening chest? idk if that reall is a performance change at all
   //But that is likely important so that seeds can remain consistent across every game
 
-  public ObjectPool<Item> itemPool;
+  private ObjectPool<GameObject> itemPool;
+  private List<GameObject> instantiatedItems;
 
   private Dictionary<Constants.ItemRarity, List<SO_Item>> itemsByRarity;
   private List<SO_Item> allEquipments;
 
+  //TODO Remove this, currently is just for testing
+  private float spawnTimer;
+  private float spawnInterval = 2f;
+
   private void Awake()
   {
-    itemPool = new ObjectPool<Item>();
+    itemPool = new ObjectPool<GameObject>();
+    instantiatedItems = new List<GameObject>();
+    InitializeItemPool();
     itemsByRarity = new Dictionary<Constants.ItemRarity, List<SO_Item>>();
     allEquipments = new List<SO_Item>();
     LoadAllItems();
+
+    spawnTimer = Time.realtimeSinceStartup;
   }
 
   private void Start()
@@ -31,14 +40,103 @@ public class ItemManager : MonoBehaviour
 
   private void Update()
   {
-    
+    if (Time.realtimeSinceStartup - spawnTimer > spawnInterval)
+    {
+      spawnTimer = Time.realtimeSinceStartup;
+      var values = System.Enum.GetValues(typeof(Constants.ItemRarity));
+      Constants.ItemRarity randomRarity = (Constants.ItemRarity)values.GetValue((int)Random.Range(0, values.Length - 1));
+      SpawnRandomItemByRarity(randomRarity);
+    }
   }
 
+  public void SpawnRandomItem()
+  {
 
-  public void SpawnItems()
+  }
+
+  public void SpawnRandomItemByRarity(Constants.ItemRarity rarity)
+  {
+    SO_Item randomItem = itemsByRarity[rarity][(int)Random.Range(0f, itemsByRarity[rarity].Count)];
+    GameObject thisGo = itemPool.Get();
+    thisGo.transform.localScale = new Vector3(10, 10, 10);
+    Item thisItem = thisGo.GetComponent(typeof(Item)) as Item;
+    thisItem.SetSO_Item(randomItem);
+    thisItem.SpawnItem();
+    instantiatedItems.Add(thisGo);
+    PlaceItemRandomly(thisGo);
+  }
+
+  public void SpawnItem()
   {
     //For now we just want to spawn the test items to show that they work
+    instantiatedItems.Add(itemPool.Get());
+  }
 
+  public void PlaceItemRandomly(GameObject item)
+  {
+    item.transform.position = new Vector3(Random.Range(-10f, 10f), Random.Range(10, 30f), Random.Range(-10f, 10f));
+  }
+
+  private void OnItemPickup(GameObject go)
+  {
+    if(!instantiatedItems.Contains(go))
+    {
+      Debug.LogError("Something went wrong an item not pulled from the item pool was instantiated and picked up by the player");
+      return;
+    }
+
+    //Reset the item and return it to the object pool
+    Item i = (Item)go.GetComponent(typeof(Item));
+    i.ResetItem();
+    itemPool.Return(go);
+  }
+
+  public List<SO_Item> GetAllItemsOfRarity(Constants.ItemRarity rarity)
+  {
+    return itemsByRarity[rarity];
+  }
+
+  public SO_Item GetItemByID(Constants.ItemID id)
+  {
+    //TODO: There is probably a better way to do this
+    foreach(SO_Item i in itemsByRarity[id.GetRarity()])
+    {
+      if (i.ID == id)
+        return i;
+    }
+
+    return null;
+  }
+
+  private void InitializeItemPool()
+  {
+    int count = 0;
+    foreach (GameObject go in itemPool.pool)
+    {
+      go.transform.parent = transform;
+      go.name = "ItemPoolObject_" + count.ToString();
+      count++;
+
+      SphereCollider sc = go.AddComponent(typeof(SphereCollider)) as SphereCollider;
+      sc.center = Vector3.zero;
+      sc.radius = 2f;
+      sc.enabled = false; //Only enable to collider when the item is spawned in
+      sc.isTrigger = true;
+
+      ParticleSystem ps = go.AddComponent(typeof(ParticleSystem)) as ParticleSystem;
+      ps.Stop();
+      MeshRenderer mr = go.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+      mr.enabled = false;
+      MeshFilter mf = go.AddComponent(typeof(MeshFilter)) as MeshFilter;
+
+      Item i = go.AddComponent(typeof(Item)) as Item;
+
+      i.so_item = null; //Only set the SO item when the item is spawned in
+      i.meshRenderer = mr;
+      i.meshFilter = mf;
+      i.collider = sc;
+      i.particleSystem = ps;
+    }
   }
 
   private void LoadAllItems()

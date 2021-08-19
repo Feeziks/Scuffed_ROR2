@@ -17,7 +17,11 @@ MonoBehaviour:
     ID: 1024
   shortDescription: Divine item for test
   longDescription: Testing divine items
-  model: {fileID: 0}
-  sprite: {fileID: 0}
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 0}
+  sprite: {fileID: 21300000, guid: cf6738b96c01a9746a205cd39ff995f9, type: 3}
+  modifiesStats: 0
+  statModifier: 0
   firstStackModifier: 5
   additionalStackModifier: 5
+  procCoefficent: 0

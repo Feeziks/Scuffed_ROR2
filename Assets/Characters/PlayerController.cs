@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
   public InputHandler inputs;
   public Camera mainCamera;
 
-  //Private Members
-  private SortedDictionary<Constants.ItemID, int> itemInventory;
+  public SortedDictionary<Constants.ItemID, int> itemInventory;
+  public SO_Item equipment;
 
   private ModifiedSettings modSettings;
 
@@ -49,8 +49,10 @@ public class PlayerController : MonoBehaviour
   private Constants.Status status;
 
   //UI
-  public GameObject spriteStorage;
-  public Sprite temporary;
+  public UIManager UIManager;
+
+  //Items
+  public ItemManager itemManager;
 
   //Public Methods
 
@@ -196,34 +198,13 @@ public class PlayerController : MonoBehaviour
   #endregion
 
   #region Items And Item Interactions
-  public void OnItemPickup(Constants.ItemID item)
+  public void OnItemPickup(SO_Item item)
   {
     //Add the item to our inventory
-    itemInventory[item] += 1;
+    itemInventory[item.ID] += 1;
 
-    UpdateItemDisplay();
+    UIManager.SendMessage("UpdateItemDisplay");
     UpdateCharacterStats();
-  }
-
-  private void UpdateItemDisplay()
-  {
-    // Update the sprites displayed in the UI if necessary + the number of that item owned
-    foreach(KeyValuePair<Constants.ItemID, int> kvp in itemInventory)
-    {
-      if(kvp.Value == 1)
-      {
-        //Display the sprite in the UI
-        //TODO: Need some kind of ItemID to ItemPrefab LUT
-        //TODO: Check if there is an Image component associate with this Item already? Just make sure we are erases and rebuilding this list every time we get a new item
-        //Better to just check the images that are already there and update from there? idk
-        spriteStorage.GetComponent<Image>().sprite = temporary;
-      }
-      else if(kvp.Value > 1)
-      {
-        //Dispaly the sprite and a number showing how many are owned
-      }
-    }
-
   }
 
   private void UpdateCharacterStats()
@@ -248,16 +229,20 @@ public class PlayerController : MonoBehaviour
   {
     //Initialize each itemID into the sorted dictionary in order, this way we can be ensured that the items always display / read out in the same order every time
     //Regardless of order that the player obtains the items
-    
-    //TODO: Get every valid ItemID - Create an entry in this sorted dict with that ID having 0 instances
-    for(int i = 0; i < Constants.startAndEndOfItemIDByRarirty.GetLength(1); i++)
+
+    //Initialize inventory dict for non-equipment items
+    foreach(Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
     {
-      for (uint j = Constants.startAndEndOfItemIDByRarirty[0,i].ID; j <= Constants.startAndEndOfItemIDByRarirty[1,i].ID; j++)
+      List<SO_Item> listItems = itemManager.GetAllItemsOfRarity(r);
+      listItems.Sort((x, y) => x.ID.CompareTo(y.ID));
+
+      foreach(SO_Item i in listItems)
       {
-        Constants.ItemID thisID = new Constants.ItemID(j);
-        itemInventory[thisID] = 0;
+        itemInventory[i.ID] = 0;
       }
     }
+
+    equipment = null;
   }
 
   #endregion

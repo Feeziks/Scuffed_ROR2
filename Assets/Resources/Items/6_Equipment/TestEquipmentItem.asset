@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
   m_Name: TestEquipmentItem
   m_EditorClassIdentifier: 
-  itemName: TestEquipmentItem
+  itemName: Test Equipment
   ID:
     ID: 2048
-  shortDescription: Item For Equipment Test
-  longDescription: Testing Item Equipment
-  model: {fileID: 0}
-  sprite: {fileID: 0}
-  firstStackModifier: 7
-  additionalStackModifier: 7
+  shortDescription: Equipment for test
+  longDescription: Testing for equipment stuff
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 9de4fe766d6f9cd438cf834a9bae8d42, type: 3}
+  modifiesStats: 0
+  statModifier: 0
+  firstStackModifier: 0
+  additionalStackModifier: 0
+  procCoefficent: 0

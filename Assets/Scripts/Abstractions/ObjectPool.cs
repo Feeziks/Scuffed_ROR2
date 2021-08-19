@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectPool<T> where T : class, new()
 {
   //The "pool"
-  private Stack<T> pool = new Stack<T>(initialDepth);
+  public Stack<T> pool = new Stack<T>(initialDepth);
   private static int initialDepth = 1024;
   private int currentDepth;
 

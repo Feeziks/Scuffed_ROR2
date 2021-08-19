@@ -11,6 +11,7 @@ public class SO_Item : ScriptableObject
   public string longDescription;
 
   public Mesh model;
+  public Material material;
   public Sprite sprite;
 
   //TRUE = does modify stats , FALSE = does something else

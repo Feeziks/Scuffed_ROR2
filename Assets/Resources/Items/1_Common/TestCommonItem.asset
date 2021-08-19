@@ -17,7 +17,11 @@ MonoBehaviour:
     ID: 0
   shortDescription: An item to test things
   longDescription: This common item is just here to test things
-  model: {fileID: 2720984866785218102, guid: 372d46ab01e77c84db9c6a9aaeada87b, type: 3}
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 0}
   sprite: {fileID: 21300000, guid: 7fbcc26156063d446a2658e5095964e6, type: 3}
+  modifiesStats: 0
+  statModifier: 0
   firstStackModifier: 1
   additionalStackModifier: 1
+  procCoefficent: 0
