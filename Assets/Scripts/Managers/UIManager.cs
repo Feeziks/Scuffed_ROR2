@@ -7,6 +7,7 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
   public GameObject itemInventoryPanel;
+  public TextMeshProUGUI moneyText;
 
   public PlayerController player;
 
@@ -74,6 +75,7 @@ public class UIManager : MonoBehaviour
     }
   }
 
+  #region Item Display and Counts
   public void UpdateItemDisplay()
   {
     foreach(KeyValuePair<Constants.ItemID, int> kvp in player.itemInventory)
@@ -119,5 +121,16 @@ public class UIManager : MonoBehaviour
     }
 
   }
+
+  #endregion
+
+  #region Money Display
+
+  public void UpdateMoney(float money)
+  {
+    moneyText.text = money.ToString();
+  }
+
+  #endregion
 
 }

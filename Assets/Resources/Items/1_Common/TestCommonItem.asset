@@ -20,7 +20,7 @@ MonoBehaviour:
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
   sprite: {fileID: 21300000, guid: 7fbcc26156063d446a2658e5095964e6, type: 3}
-  modifiesStats: 0
+  modifiesStats: 1
   statModifier: 1
   firstStackModifier: 5
   additionalStackModifier: 5

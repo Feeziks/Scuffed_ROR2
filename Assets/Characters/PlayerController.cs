@@ -44,9 +44,26 @@ public class PlayerController : MonoBehaviour
   private float rotationVelocity;
   //private float rotationSmoothTime = 0.12f;
 
+  //Camera stuff
+  public GameObject cinemachineCameraTarget;
+  private const float cameraMoveThreshold = 0.01f;
+  private bool LockCameraPosition = false;
+  private float cinemachineTargetYaw;
+  private float cinemachineTargetPitch;
+  public float bottomClamp = 10f;
+  public float topClamp = 80f;
+  public float cameraAngleOverride;
+
   //Health / status
   private float currHealth;
   private Constants.Status status;
+
+  private float money = 30f;
+
+  //Projectile Pool
+  public SO_Ability primaryAbility;
+  private GameObject projectPoolParent;
+  private ObjectPool<GameObject> projectilePool;
 
   //UI
   public UIManager UIManager;
@@ -63,6 +80,11 @@ public class PlayerController : MonoBehaviour
 
     groundedOffset *= transform.localScale.y / 3;
     groundedRadius *= transform.localScale.magnitude;
+
+    Cursor.lockState = CursorLockMode.Locked;
+
+    projectilePool = new ObjectPool<GameObject>();
+    InitializeProjectilePool();
   }
 
   private void Start()
@@ -79,6 +101,9 @@ public class PlayerController : MonoBehaviour
     Gravity();
     Jump();
     Move();
+    LockPlayerRotation();
+
+    AbilitiesCheck();
   }
 
   private void FixedUpdate()
@@ -88,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
   private void LateUpdate()
   {
-    //CameraRotation();
+    CameraRotation();
   }
 
   #region Movement / Control
@@ -195,6 +220,110 @@ public class PlayerController : MonoBehaviour
     controller.Move(targetDirection.normalized * (velocity * Time.deltaTime) + new Vector3(0.0f, verticalVelocity, 0.0f) * Time.deltaTime);
   }
 
+  private void CameraRotation()
+  {
+    // if there is an input and camera position is not fixed
+    if (inputs.look.sqrMagnitude >= cameraMoveThreshold && !LockCameraPosition)
+    {
+      cinemachineTargetYaw += inputs.look.x * Time.deltaTime;
+      cinemachineTargetPitch += inputs.look.y * Time.deltaTime;
+    }
+
+    // clamp our rotations so our values are limited 360 degrees
+    cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
+    cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, bottomClamp, topClamp);
+
+    // Cinemachine will follow this target
+    //cinemachineCameraTarget.transform.rotation = Quaternion.Euler(cinemachineTargetPitch + cameraAngleOverride, cinemachineTargetYaw, 0.0f);
+  }
+
+  private float ClampAngle(float lfAngle, float lfMin, float lfMax)
+  {
+    if (lfAngle < -360f) lfAngle += 360f;
+    if (lfAngle > 360f) lfAngle -= 360f;
+    return Mathf.Clamp(lfAngle, lfMin, lfMax);
+  }
+
+  private void LockPlayerRotation()
+  {
+    transform.eulerAngles = new Vector3(0.0f, transform.eulerAngles.y, 0f);
+  }
+
+  #endregion
+
+  #region Abilities
+
+  private void AbilitiesCheck()
+  {
+    PrimaryAbility();
+    SecondaryAbility();
+    TertiaryAbility();
+    QuaternaryAbility();
+  }
+
+  private void PrimaryAbility()
+  {
+    if(inputs.primaryAbility)
+    {
+      inputs.primaryAbility = false;
+
+      //Create our projectile and shoot it
+      if(primaryAbility.projectile)
+      {
+        GameObject go = projectilePool.Get();
+        Projectile p = go.GetComponent(typeof(Projectile)) as Projectile;
+        p.Spawn(transform.position, transform.forward);
+      }
+
+    }
+  }
+  private void SecondaryAbility()
+  {
+
+  }
+
+  private void TertiaryAbility()
+  {
+
+  }
+
+  private void QuaternaryAbility()
+  {
+
+  }
+
+  private void InitializeProjectilePool()
+  {
+    int count = 0;
+    projectPoolParent = new GameObject("ProjectilePool");
+    projectPoolParent.transform.localPosition = Vector3.zero;
+    projectPoolParent.transform.localScale = Vector3.one;
+    foreach (GameObject go in projectilePool.pool)
+    {
+      //go.transform.SetParent(transform, false);
+      go.transform.parent = projectPoolParent.transform;
+      go.name = "Projectile_" + count.ToString();
+      count++;
+
+      MeshFilter mf = go.AddComponent(typeof(MeshFilter)) as MeshFilter;
+      MeshRenderer mr = go.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+      mr.enabled = false;
+      SphereCollider sc = go.AddComponent(typeof(SphereCollider)) as SphereCollider;
+      sc.enabled = false;
+      sc.isTrigger = true;
+      sc.center = Vector3.zero;
+      sc.radius = primaryAbility.abilityProjectile.colliderRadius;
+
+      Projectile p = go.AddComponent(typeof(Projectile)) as Projectile;
+      p.projectileData = primaryAbility.abilityProjectile;
+      p.mf = mf;
+      p.mr = mr;
+      p.sc = sc;
+
+      go.SetActive(false);
+    }
+  }
+
   #endregion
 
   #region Items And Item Interactions
@@ -228,6 +357,15 @@ public class PlayerController : MonoBehaviour
     currWalkVelocity = modSettings.moveSpeed;
     currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
     currJumpHeight = modSettings.jumpHeight;
+  }
+
+  #endregion
+
+  #region Money
+  public void UpdateMoney(float amount)
+  {
+    money += amount;
+    UIManager.UpdateMoney(money);
   }
 
   #endregion

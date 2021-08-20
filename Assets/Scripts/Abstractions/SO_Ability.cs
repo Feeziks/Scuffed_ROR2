@@ -18,6 +18,8 @@ public class SO_Ability : ScriptableObject
   public float cost; //Not really sure if we need this
 
   public bool passive; //True = passive ; false = active
+  public bool projectile; //True = ability creates projectiles ; false = ability does NOT create projectiles
+  public SO_Projectile abilityProjectile;
 
   public float procCoefficent;
 

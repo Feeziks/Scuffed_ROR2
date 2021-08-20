@@ -16,6 +16,8 @@ public class InputHandler : MonoBehaviour
   public bool cursorLocked = true;
   public bool cursorInputForLook = true;
 
+  public bool primaryAbility;
+
   //Public Methods
   public void OnMove(InputAction.CallbackContext context)
   {
@@ -42,8 +44,14 @@ public class InputHandler : MonoBehaviour
     reset = true;
   }
 
+  public void OnLook(InputAction.CallbackContext context)
+  {
+    look = context.ReadValue<Vector2>();
+  }
+
   public void OnPrimaryAbility(InputAction.CallbackContext context)
   {
-    //TODO something
+    if(context.started)
+      primaryAbility = true;
   }
 }

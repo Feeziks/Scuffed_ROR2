@@ -44,7 +44,7 @@ public class ItemManager : MonoBehaviour
     {
       spawnTimer = Time.realtimeSinceStartup;
       var values = System.Enum.GetValues(typeof(Constants.ItemRarity));
-      Constants.ItemRarity randomRarity = (Constants.ItemRarity)values.GetValue((int)Random.Range(0, values.Length - 1));
+      Constants.ItemRarity randomRarity = (Constants.ItemRarity)values.GetValue((int)Random.Range(0, values.Length));
       SpawnRandomItemByRarity(randomRarity);
     }
   }
