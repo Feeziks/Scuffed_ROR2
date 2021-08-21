@@ -21,6 +21,6 @@ MonoBehaviour:
   cooldown: 500
   cost: 0
   passive: 0
-  projectile: 0
+  projectile: 1
   abilityProjectile: {fileID: 11400000, guid: 92e244cc47886364c81d0dd9c1811218, type: 2}
   procCoefficent: 0

@@ -5,10 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyAgent : MonoBehaviour
 {
+  public SO_EnemyData enemyData;
+
   public NavMeshAgent navMeshAgent;
   public float speed;
   public float maxHealth;
   public float currHealth;
+
+  public PlayerController player;
 
   public Transform target;
 
@@ -35,6 +39,7 @@ public class EnemyAgent : MonoBehaviour
   private void Die()
   {
     Debug.Log("I dieded");
+    player.gameObject.SendMessage("OnEnemyDeath", gameObject);
     gameObject.SetActive(false);
   }
 }

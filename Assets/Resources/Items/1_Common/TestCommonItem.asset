@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: TestingCommonItem
   ID:
-    ID: 0
+    active: 0
+    rarity: 1
+    uniqueID: 0
   shortDescription: An item to test things
   longDescription: This common item is just here to test things
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -25,3 +27,5 @@ MonoBehaviour:
   firstStackModifier: 5
   additionalStackModifier: 5
   procCoefficent: 0
+  onDeathEffect: 0
+  onHitEffect: 0

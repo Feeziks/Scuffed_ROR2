@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
 
       foreach(SO_Item i in listItems)
       {
-        GameObject newGo = new GameObject("Item_" + i.ID.ID.ToString());
+        GameObject newGo = new GameObject("Item_" + i.ID.GetID().ToString());
         RectTransform rt = newGo.AddComponent(typeof(RectTransform)) as RectTransform;
         rt.SetParent(parent, false);
         rt.anchorMin = new Vector2(0f, 0.5f);
@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
         itemInventoryToSpriteGameObject[i.ID] = newGo;
         itemInventoryToRectTransform[i.ID] = rt;
 
-        GameObject newTextGo = new GameObject("Item_" + i.ID.ID.ToString() + "_Counter");
+        GameObject newTextGo = new GameObject("Item_" + i.ID.GetID().ToString() + "_Counter");
         RectTransform textRt = newTextGo.AddComponent(typeof(RectTransform)) as RectTransform;
         textRt.SetParent(rt, false);
         textRt.anchorMin = new Vector2(1f, 0f);
@@ -78,19 +78,20 @@ public class UIManager : MonoBehaviour
   #region Item Display and Counts
   public void UpdateItemDisplay()
   {
-    foreach(KeyValuePair<Constants.ItemID, int> kvp in player.itemInventory)
+    foreach(KeyValuePair<SO_Item, int> kvp in player.itemInventory)
     {
+      Constants.ItemID id = kvp.Key.ID;
       if(kvp.Value == 1)
       {
         //First item of this kind picked up -> add its sprite into the item inventory in order of item ID
-        itemInventoryToSpriteGameObject[kvp.Key].SetActive(true);
+        itemInventoryToSpriteGameObject[id].SetActive(true);
         //Move everything around to be in the right order
       }
       else if(kvp.Value > 1)
       {
         //Multiple of this item held add text to its sprite to display the number of stacks it has
-        itemInventoryToText[kvp.Key].gameObject.SetActive(true);
-        itemInventoryToText[kvp.Key].text = "x" + kvp.Value;
+        itemInventoryToText[id].gameObject.SetActive(true);
+        itemInventoryToText[id].text = "x" + kvp.Value;
 
       }
     }

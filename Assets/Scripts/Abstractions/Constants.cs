@@ -1,35 +1,35 @@
 ﻿using System.Collections;
 using System;
+using UnityEngine;
 
 public static class Constants
 {
-  public enum ElementTypes
+  [Flags] public enum ElementTypes
   {
-    Fire = 0b1,
-    Water = 0b10,
-    Earth = 0b100,
-    Air = 0b1000,
-    Electric = 0b10000,
-    None = 0b100000,
-    NUM_ELEMENTS = 6 //Counter / number of all element types above
+    Fire      = 1,
+    Water     = 2,
+    Earth     = 4,
+    Air       = 8,
+    Electric  = 16,
+    None      = 0
   }
 
-  public enum Status
+  [Flags] public enum Status
   {
-    normal = 0b0000000000000000,
-    onFire = 0b0000000000000001,
-    wet = 0b0000000000000010,
-    stunned = 0b0000000000000100,
-    slowed = 0b0000000000001000
+    normal  = 0,
+    onFire  = 1,
+    wet     = 2,
+    stunned = 4,
+    slowed  = 8
   }
 
-  public enum ItemRarity
+  [Flags] public enum ItemRarity
   {
-    common = 0b000,
-    uncommon = 0b001,
-    rare = 0b010,
-    legendary = 0b011,
-    divine = 0b100
+    common    = 1,
+    uncommon  = 2,
+    rare      = 4,
+    legendary = 8,
+    divine    = 16
   }
 
   [System.Serializable]
@@ -57,7 +57,12 @@ public static class Constants
   [System.Serializable]
   public class ItemID : IComparable
   {
-    public uint ID; //uint is a 32-bit value
+    private uint ID; //uint is a 32-bit value
+
+    public bool active;
+    public ItemRarity rarity;
+    [Range(0, 256)]
+    public uint uniqueID;
 
     private static uint activeBitWidth = 0b1;
     private static int activeBitShift = 11;
@@ -73,51 +78,66 @@ public static class Constants
 
     public ItemID()
     {
-      ID = uint.MaxValue;
+      active = false;
+      rarity = 0;
+      uniqueID = 0;
     }
 
     public ItemID(uint i)
     {
       ID = i;
+      active = ((ID & activeMask) >> activeBitShift) == 1 ? true : false;
+      rarity = (ItemRarity)((ID & rarityMask) >> rarityBitShift);
+      uniqueID = (ID & uniqueID) >> uniqueIDBitShift;
     }
 
-    public ItemID(bool active, uint rarity, uint uniqueID)
+    public ItemID(bool a, ItemRarity r, uint uID)
     {
-      uint a = (uint)(active ? 1 : 0);
-      ID = (a << activeBitShift) + (rarity << rarityBitShift) + (uniqueID << uniqueIDBitShift);
+      active = a;
+      rarity = r;
+      uniqueID = (uID & uniqueIDMask);
+      UpdateId();
     }
 
     public bool IsEquipment()
     {
-      return (ID & activeMask) == (0b1 << activeBitShift) ? true : false;
+      return active;
     }
 
     public ItemRarity GetRarity()
     {
-      int temp = (int)(ID & rarityMask);
-      temp = temp >> rarityBitShift;
-      ItemRarity temp2 = (ItemRarity)temp;
-
-      return (ItemRarity)((ID & rarityMask) >> rarityBitShift);
+      return rarity;
     }
 
     public uint GetUniqueID()
     {
-      return (ID & uniqueIDMask) >> uniqueIDBitShift;
+      return uniqueID;
+    }
+
+    public uint GetID()
+    {
+      return ID;
+    }
+    
+    private void UpdateId()
+    {
+      ID = ((uint)(active == true ? 1 : 0) << activeBitShift) + ((uint)rarity << rarityBitShift) + (uniqueID << uniqueIDBitShift);
     }
 
     public int CompareTo(object obj)
     {
       if (obj == null)
         return 1;
-
-      ItemID otherItemId = obj as ItemID;
-      if (otherItemId != null)
+      UpdateId();
+      ItemID otherItem = obj as ItemID;
+      if (otherItem != null)
       {
-        return this.ID.CompareTo(otherItemId.ID);
+        return this.ID.CompareTo(otherItem.GetID());
       }
       else
-        throw new ArgumentException("Object is no an ItemID");
+        throw new ArgumentException("Object is not an ItemID");
     }
   }
+
+
 }

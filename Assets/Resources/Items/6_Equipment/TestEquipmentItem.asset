@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Test Equipment
   ID:
-    ID: 2048
+    active: 1
+    rarity: 0
+    uniqueID: 0
   shortDescription: Equipment for test
   longDescription: Testing for equipment stuff
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -25,3 +27,5 @@ MonoBehaviour:
   firstStackModifier: 0
   additionalStackModifier: 0
   procCoefficent: 0
+  onDeathEffect: 0
+  onHitEffect: 0

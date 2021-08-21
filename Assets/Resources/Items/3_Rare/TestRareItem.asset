@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: RareTestItem
   ID:
-    ID: 512
+    active: 0
+    rarity: 4
+    uniqueID: 0
   shortDescription: Rare item for test
   longDescription: Testing of Rare Items
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -25,3 +27,5 @@ MonoBehaviour:
   firstStackModifier: 3
   additionalStackModifier: 3
   procCoefficent: 0
+  onDeathEffect: 0
+  onHitEffect: 0

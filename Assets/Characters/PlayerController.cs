@@ -12,8 +12,11 @@ public class PlayerController : MonoBehaviour
   public InputHandler inputs;
   public Camera mainCamera;
 
-  public SortedDictionary<Constants.ItemID, int> itemInventory;
+  public SortedDictionary<SO_Item, int> itemInventory;
+  public Dictionary<SO_Item, int> onDeathItems;
+  public Dictionary<SO_Item, int> onHitItems;
   public SO_Item equipment;
+  public SO_Item_OnDeathEffect testOnDeathEffectItem;
 
   private ModifiedSettings modSettings;
 
@@ -89,9 +92,11 @@ public class PlayerController : MonoBehaviour
 
   private void Start()
   {
-    itemInventory = new SortedDictionary<Constants.ItemID, int>();
+    itemInventory = new SortedDictionary<SO_Item, int>();
+    onDeathItems = new Dictionary<SO_Item, int>();
+    onHitItems = new Dictionary<SO_Item, int>();
     modSettings = new ModifiedSettings();
-    InitializeItemInventory();
+    InitializeItemInventories();
     SetCharacterBaseStats();
   }
 
@@ -330,7 +335,7 @@ public class PlayerController : MonoBehaviour
   public void OnItemPickup(SO_Item item)
   {
     //Add the item to our inventory
-    itemInventory[item.ID] += 1;
+    itemInventory[item] += 1;
 
     UIManager.SendMessage("UpdateItemDisplay");
     UpdateCharacterStatsOnItemPickup(item);
@@ -338,7 +343,7 @@ public class PlayerController : MonoBehaviour
 
   private void UpdateCharacterStatsOnItemPickup(SO_Item item)
   {
-    modSettings.ApplyItem(item, itemInventory[item.ID]);
+    modSettings.ApplyItem(item, itemInventory[item]);
 
     currWalkVelocity = modSettings.moveSpeed;
     currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
@@ -359,6 +364,48 @@ public class PlayerController : MonoBehaviour
     currJumpHeight = modSettings.jumpHeight;
   }
 
+  private void OnEnemyDeath(GameObject enemy)
+  {
+    //See if we have any items with on death events/effects
+    OnDeathItems(enemy);
+  }
+
+  private void OnDeathItems(GameObject enemy)
+  {
+    foreach(KeyValuePair<SO_Item, int> kvp in onDeathItems)
+    {
+      if(kvp.Value > 0)
+      {
+        //Apply the items effect
+      }
+    }
+
+    //Decide if the item will proc
+    float random = Random.Range(0f, 1f);
+    if(random < testOnDeathEffectItem.procChance)
+    {
+      testOnDeathEffectItem.onDeathAction.PerformAction(enemy);
+    }
+  }
+
+  private void OnHitEnemy(float procCoeff)
+  {
+    //TODO: Likely need to create a new data type to pass for this
+    //Need to know the damage that was dealth, the running proc coeff and probably some other stuff too
+  }
+  private void OnHitItems()
+  {
+    foreach(KeyValuePair<SO_Item, int> kvp in onHitItems)
+    {
+      if(kvp.Value > 0)
+      {
+        //Apply the item effects if we proc them
+        //TODO: How to find what ability / equipment / item caused this hit - need a running proc coefficnet not static
+        //for instance Ability A PC = 1 Item A PC = 0.5
+      }
+    }
+  }
+
   #endregion
 
   #region Money
@@ -371,7 +418,7 @@ public class PlayerController : MonoBehaviour
   #endregion
 
   #region Helper functions
-  private void InitializeItemInventory()
+  private void InitializeItemInventories()
   {
     //Initialize each itemID into the sorted dictionary in order, this way we can be ensured that the items always display / read out in the same order every time
     //Regardless of order that the player obtains the items
@@ -384,7 +431,17 @@ public class PlayerController : MonoBehaviour
 
       foreach(SO_Item i in listItems)
       {
-        itemInventory[i.ID] = 0;
+        itemInventory[i] = 0;
+
+        if(i.onDeathEffect)
+        {
+          onDeathItems[i] = 0;
+        }
+
+        if(i.onHitEffect)
+        {
+          onHitItems[i] = 0;
+        }
       }
     }
 

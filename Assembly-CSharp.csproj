@@ -56,22 +56,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Abstractions\SO_PlayableCharacterSettings.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\SO_Projectile.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\SO_EnemyData.cs" />
     <Compile Include="Assets\Scripts\Abstractions\SO_Ability.cs" />
     <Compile Include="Assets\Scripts\Abstractions\I_PlayableCharacter.cs" />
     <Compile Include="Assets\Scripts\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\Abstractions\SO_AbilityTree.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\SO_EnemySettings.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAgent.cs" />
     <Compile Include="Assets\Scripts\Abstractions\ModifiedSettings.cs" />
     <Compile Include="Assets\Characters\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Constants.cs" />
+    <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\Managers\ItemManager.cs" />
     <Compile Include="Assets\Scripts\Abstractions\SO_Item.cs" />
     <Compile Include="Assets\Scripts\Abstractions\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\InputActions\InputHandler.cs" />
     <Compile Include="Assets\Scripts\Abstractions\SO_CharacterData.cs" />
-    <Compile Include="Assets\Scripts\Enemy\EnemyAgent.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\SO_Projectile.cs" />
-    <Compile Include="Assets\Scripts\Projectile.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_Item2.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_Item_StatModifier.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_Item_OnHitEffect.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_Item_OnDeathEffect.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_Item_Equipment.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\SO_ScriptableAction.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\OnDeathActions\TestOnDeathAction.cs" />
+    <Compile Include="Assets\Scripts\NewItemHeir\OnHitActions\TestOnHitAction.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

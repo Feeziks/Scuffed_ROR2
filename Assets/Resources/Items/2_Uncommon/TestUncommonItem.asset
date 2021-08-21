@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: UncommonItemTest
   ID:
-    ID: 256
+    active: 0
+    rarity: 2
+    uniqueID: 0
   shortDescription: An uconnom item to test
   longDescription: Testing uncommon Items
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -25,3 +27,5 @@ MonoBehaviour:
   firstStackModifier: 0.1
   additionalStackModifier: 0.1
   procCoefficent: 0
+  onDeathEffect: 0
+  onHitEffect: 0

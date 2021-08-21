@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: TestDivineItem
   ID:
-    ID: 1024
+    active: 0
+    rarity: 16
+    uniqueID: 0
   shortDescription: Divine item for test
   longDescription: Testing divine items
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
@@ -25,3 +27,5 @@ MonoBehaviour:
   firstStackModifier: 5
   additionalStackModifier: 5
   procCoefficent: 0
+  onDeathEffect: 0
+  onHitEffect: 0

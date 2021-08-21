@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
   private void Start()
   {
     mf.mesh = projectileData.model;
-    transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+    transform.localScale = new Vector3(2f, 2f, 1f);
   }
 
   private void Update()

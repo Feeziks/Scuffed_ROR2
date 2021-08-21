@@ -155,13 +155,13 @@ public class ItemManager : MonoBehaviour
     foreach(Object item in allItems)
     {
       SO_Item itemCasted = (SO_Item)item;
-      if(itemCasted.ID.IsEquipment())
+      if(itemCasted.ID.active)
       {
         allEquipments.Add(itemCasted);
       }
       else
       {
-        itemsByRarity[itemCasted.ID.GetRarity()].Add(itemCasted);
+        itemsByRarity[itemCasted.ID.rarity].Add(itemCasted);
       }
     }
   }
