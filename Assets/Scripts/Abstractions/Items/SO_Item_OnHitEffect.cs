@@ -11,5 +11,5 @@ public class SO_Item_OnHitEffect : SO_Item
   public float procChance; //Does this effect proc every time? if not how often
 
   //TODO: Store the function that will run when you hit something and it procs
-  public SO_ScriptableAction onDeathAction;
+  public SO_ScriptableAction onHitAction;
 }

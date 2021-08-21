@@ -8,8 +8,7 @@ public class UIManager : MonoBehaviour
 {
   public GameObject itemInventoryPanel;
   public TextMeshProUGUI moneyText;
-
-  public PlayerController player;
+  public int player;
 
   public float xSpacing = 10f;
   public float xLimit = 800f;
@@ -18,6 +17,24 @@ public class UIManager : MonoBehaviour
   private SortedDictionary<Constants.ItemID, GameObject> itemInventoryToSpriteGameObject;
   private SortedDictionary<Constants.ItemID, TextMeshProUGUI> itemInventoryToText;
   private Dictionary<Constants.ItemID, RectTransform> itemInventoryToRectTransform;
+
+  private ItemManager itemManager;
+
+  private void OnEnable()
+  {
+    EventManager.itemPickupEvent += ItemPickup;
+  }
+
+  private void OnDisable()
+  {
+    EventManager.itemPickupEvent -= ItemPickup;
+  }
+
+  private void Awake()
+  {
+    player = 0;
+    itemManager = FindObjectOfType(typeof(ItemManager)) as ItemManager;
+  }
 
   public void Start()
   {
@@ -28,12 +45,13 @@ public class UIManager : MonoBehaviour
     InitializeItemInventory();
   }
 
+  #region Initializers and helpers
   private void InitializeItemInventory()
   {
     RectTransform parent = itemInventoryPanel.GetComponent(typeof(RectTransform)) as RectTransform;
     foreach (Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
     {
-      List<SO_Item> listItems = player.itemManager.GetAllItemsOfRarity(r);
+      List<SO_Item> listItems = itemManager.GetAllItemsOfRarity(r);
       listItems.Sort((x, y) => x.id.CompareTo(y.id));
 
       foreach(SO_Item i in listItems)
@@ -75,10 +93,14 @@ public class UIManager : MonoBehaviour
     }
   }
 
+  #endregion
+
   #region Item Display and Counts
   public void UpdateItemDisplay()
   {
-    foreach(KeyValuePair<SO_Item, int> kvp in player.itemInventory)
+    SortedDictionary<SO_Item, int> inventory = new SortedDictionary<SO_Item, int>();
+    itemManager.GetPlayerInventory(player, ref inventory);
+    foreach(KeyValuePair<SO_Item, int> kvp in inventory)
     {
       Constants.ItemID id = kvp.Key.id;
       if(kvp.Value == 1)
@@ -130,6 +152,15 @@ public class UIManager : MonoBehaviour
   public void UpdateMoney(float money)
   {
     moneyText.text = money.ToString();
+  }
+
+  #endregion
+
+  #region Event Handling
+
+  public void ItemPickup(OnItemPickupDataClass data)
+  {
+    UpdateItemDisplay();
   }
 
   #endregion

@@ -17,18 +17,51 @@ public class ItemManager : MonoBehaviour
   private Dictionary<Constants.ItemRarity, List<SO_Item>> itemsByRarity;
   private List<SO_Item> allEquipments;
 
+  private EventManager eManager;
+
   //TODO Remove this, currently is just for testing
   private float spawnTimer;
   private float spawnInterval = 2f;
 
+  public int numPlayers;
+  private Dictionary<int, SortedDictionary<SO_Item, int>> playerInventories;
+  private Dictionary<int, List<SO_Item_OnDeathEffect>> playerOnDeathEffects;
+  private Dictionary<int, List<SO_Item_OnHitEffect>> playerOnHitEffects;
+  
+  private void OnEnable()
+  {
+    EventManager.enemyDeathEvent += EnemyDeath;
+    EventManager.enemyHitEvent   += EnemyHit;
+    EventManager.itemPickupEvent += ItemPickup;
+  }
+
+  private void OnDisable()
+  {
+    EventManager.enemyDeathEvent -= EnemyDeath;
+    EventManager.enemyHitEvent   -= EnemyHit;
+    EventManager.itemPickupEvent -= ItemPickup;
+  }
+
   private void Awake()
   {
+    eManager = FindObjectOfType(typeof(EventManager)) as EventManager;
+
     itemPool = new ObjectPool<GameObject>();
     instantiatedItems = new List<GameObject>();
     InitializeItemPool();
     itemsByRarity = new Dictionary<Constants.ItemRarity, List<SO_Item>>();
     allEquipments = new List<SO_Item>();
     LoadAllItems();
+
+    if (numPlayers <= 0)
+      numPlayers = 1;
+    playerInventories = new Dictionary<int, SortedDictionary<SO_Item, int>>();
+    playerOnDeathEffects = new Dictionary<int, List<SO_Item_OnDeathEffect>>();
+    playerOnDeathEffects[0] = new List<SO_Item_OnDeathEffect>();
+    playerOnHitEffects = new Dictionary<int, List<SO_Item_OnHitEffect>>();
+    playerOnHitEffects[0] = new List<SO_Item_OnHitEffect>();
+
+    InitializePlayerInventories();
 
     spawnTimer = Time.realtimeSinceStartup;
   }
@@ -49,6 +82,7 @@ public class ItemManager : MonoBehaviour
     }
   }
 
+  #region spawning random items
   public void SpawnRandomItem()
   {
 
@@ -77,6 +111,7 @@ public class ItemManager : MonoBehaviour
   {
     item.transform.position = new Vector3(Random.Range(-10f, 10f), Random.Range(10, 30f), Random.Range(-10f, 10f));
   }
+  #endregion
 
   private void OnItemPickup(GameObject go)
   {
@@ -92,6 +127,7 @@ public class ItemManager : MonoBehaviour
     itemPool.Return(go);
   }
 
+  #region initilizations and helpers
   public List<SO_Item> GetAllItemsOfRarity(Constants.ItemRarity rarity)
   {
     return itemsByRarity[rarity];
@@ -137,6 +173,7 @@ public class ItemManager : MonoBehaviour
       i.meshFilter = mf;
       i.sc = sc;
       i.ps = ps;
+      i.eManager = eManager;
 
       go.SetActive(false);
     }
@@ -166,4 +203,77 @@ public class ItemManager : MonoBehaviour
     }
   }
 
+  private void InitializePlayerInventories()
+  {
+    for(int i = 0; i < numPlayers; i++)
+    {
+      playerInventories[i] = new SortedDictionary<SO_Item, int>();
+      //Initialize inventory dict for non-equipment items
+      foreach (Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
+      {
+        List<SO_Item> listItems = GetAllItemsOfRarity(r);
+        listItems.Sort((x, y) => x.id.CompareTo(y.id));
+
+        foreach (SO_Item item in listItems)
+        {
+          playerInventories[i][item] = 0;
+        }
+      }
+    }
+  }
+
+  public void GetPlayerInventory(int player, ref SortedDictionary<SO_Item, int> dict)
+  {
+    dict = playerInventories[player];
+  }
+
+  #endregion
+
+  #region Event Handling
+
+  public void EnemyDeath(EnemyDeathDataType data)
+  {
+    foreach(SO_Item_OnDeathEffect item in playerOnDeathEffects[data.playerThatKilledEnemy])
+    {
+      //TODO: Add scaling for when multiple items are held
+      item.onDeathAction.PerformAction(data.enemy);
+    }
+  }
+
+  public void EnemyHit(OnEnemyHitDataType data)
+  {
+    foreach (SO_Item_OnHitEffect item in playerOnHitEffects[data.playerThatHitEnemy])
+    {
+      //TODO: Add scaling for when multiple items are held
+      item.onHitAction.PerformAction(data.enemy);
+    }
+  }
+
+  public void ItemPickup(OnItemPickupDataClass data)
+  {
+    //Add Item to our inventory
+    playerInventories[data.player][data.item] += 1;
+
+    if (data.item is SO_Item_OnDeathEffect)
+    {
+      if (!playerOnDeathEffects[data.player].Contains((SO_Item_OnDeathEffect)data.item))
+      {
+        playerOnDeathEffects[data.player].Add((SO_Item_OnDeathEffect)data.item);
+      }
+    }
+
+    if (data.item is SO_Item_OnHitEffect)
+    {
+      if (!playerOnHitEffects[data.player].Contains((SO_Item_OnHitEffect)data.item))
+      {
+        playerOnHitEffects[data.player].Add((SO_Item_OnHitEffect)data.item);
+      }
+    }
+    //Return the item back into our pool
+    Item i = (Item)data.itemGO.GetComponent(typeof(Item));
+    i.ResetItem();
+    itemPool.Return(data.itemGO);
+  }
+
+  #endregion
 }

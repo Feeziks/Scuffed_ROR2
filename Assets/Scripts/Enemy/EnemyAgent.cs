@@ -16,6 +16,8 @@ public class EnemyAgent : MonoBehaviour
 
   public Transform target;
 
+  public EventManager eManager;
+
   private void Start()
   {
     navMeshAgent.speed = speed;
@@ -27,19 +29,23 @@ public class EnemyAgent : MonoBehaviour
     navMeshAgent.SetDestination(target.position);
   }
 
-  private void RecieveDamage(float damage)
+  private void RecieveDamage(DamageType damage)
   {
-    currHealth -= damage;
+    currHealth -= damage.value;
     if(currHealth < 0)
     {
-      Die();
+      Die(damage);
+    }
+    else
+    {
+      OnEnemyHitDataType data = new OnEnemyHitDataType(gameObject, damage.value, damage.playerthatDealtDamage);
+      eManager.SendMessage("OnEnemyHit", data);
     }
   }
 
-  private void Die()
+  private void Die(DamageType damage)
   {
-    Debug.Log("I dieded");
-    player.gameObject.SendMessage("OnEnemyDeath", gameObject);
-    gameObject.SetActive(false);
+    EnemyDeathDataType data = new EnemyDeathDataType(gameObject, damage.value, damage.playerthatDealtDamage);
+    eManager.SendMessage("OnEnemyDeath", data);
   }
 }

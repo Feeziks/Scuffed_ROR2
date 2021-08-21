@@ -11,10 +11,6 @@ public class PlayerController : MonoBehaviour
   public SO_CharacterData characterData;
   public InputHandler inputs;
 
-  public SortedDictionary<SO_Item, int> itemInventory;
-  public Dictionary<SO_Item, int> onDeathItems;
-  public Dictionary<SO_Item, int> onHitItems;
-
   private ModifiedSettings modSettings;
 
   //Jumping / grounded
@@ -36,8 +32,6 @@ public class PlayerController : MonoBehaviour
   public float fallingGravity = -150.0f;
   public float baseGravity = -30f;
   private float terminalVelocity = -700.0f;
-  private float currWalkVelocity;
-  private float currSprintVelocity;
 
   //Rotations
   private float targetRotation;
@@ -65,15 +59,18 @@ public class PlayerController : MonoBehaviour
   private GameObject projectPoolParent;
   private ObjectPool<GameObject> projectilePool;
 
-  //UI
-  public UIManager UIManager;
 
-  //Items
-  public ItemManager itemManager;
+  private void OnEnable()
+  {
+    EventManager.itemPickupEvent += OnItemPickup;
+  }
 
-  //Public Methods
+  private void OnDisable()
+  {
+    EventManager.itemPickupEvent -= OnItemPickup;
+  }
 
-  //Private Methods
+
   private void Awake()
   {
     jumpTimer = Time.realtimeSinceStartup;
@@ -89,11 +86,7 @@ public class PlayerController : MonoBehaviour
 
   private void Start()
   {
-    itemInventory = new SortedDictionary<SO_Item, int>();
-    onDeathItems = new Dictionary<SO_Item, int>();
-    onHitItems = new Dictionary<SO_Item, int>();
     modSettings = new ModifiedSettings();
-    InitializeItemInventories();
     SetCharacterBaseStats();
   }
 
@@ -137,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
       //Apply Velocity to reach the jump height && cancel any vertical velocity we had before
       verticalVelocity = 0f;
-      verticalVelocity = currJumpHeight / (1f / timeToJumpApex);
+      verticalVelocity = modSettings.jumpHeight / (1f / timeToJumpApex);
       availableJumps -= 1;
       inputs.jump = false;
     }
@@ -197,7 +190,7 @@ public class PlayerController : MonoBehaviour
   private void Move()
   {
     //Get target velocity based on sprinting or not
-    float targetVelocity = inputs.sprint ? currSprintVelocity : currWalkVelocity;
+    float targetVelocity = inputs.sprint ? modSettings.moveSpeed * modSettings.sprintMultiplier : modSettings.moveSpeed;
     if (inputs.move == Vector2.zero)
       targetVelocity = 0.0f;
 
@@ -329,22 +322,15 @@ public class PlayerController : MonoBehaviour
   #endregion
 
   #region Items And Item Interactions
-  public void OnItemPickup(SO_Item item)
+
+  private void OnItemPickup(OnItemPickupDataClass data)
   {
-    //Add the item to our inventory
-    itemInventory[item] += 1;
-
-    UIManager.SendMessage("UpdateItemDisplay");
-    UpdateCharacterStatsOnItemPickup(item);
-  }
-
-  private void UpdateCharacterStatsOnItemPickup(SO_Item item)
-  {
-    modSettings.ApplyItem(item, itemInventory[item]);
-
-    currWalkVelocity = modSettings.moveSpeed;
-    currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
-    currJumpHeight = modSettings.jumpHeight;
+    //Modify our player's stats to reflect new items stats if relevant
+    if(data.item is SO_Item_StatModifier)
+    {
+      //TODO Mod settings probably needs to know how many of a certain item has already been applied since first stack and subsequent stacks have different effects
+      modSettings.ApplyItem(data.item);
+    }
   }
 
   private void SetCharacterBaseStats()
@@ -355,77 +341,12 @@ public class PlayerController : MonoBehaviour
     modSettings.sprintMultiplier = characterData.characterSettings.baseSprintSpeedMultiplier;
     modSettings.jumpHeight = characterData.characterSettings.baseJumpHeight;
     modSettings.numJumps = characterData.characterSettings.baseNumberJumps;
-
-    currWalkVelocity = modSettings.moveSpeed;
-    currSprintVelocity = currWalkVelocity * modSettings.sprintMultiplier;
-    currJumpHeight = modSettings.jumpHeight;
-  }
-
-  private void OnEnemyDeath(GameObject enemy)
-  {
-    //See if we have any items with on death events/effects
-    OnDeathItems(enemy);
-  }
-
-  private void OnDeathItems(GameObject enemy)
-  {
-    foreach(KeyValuePair<SO_Item, int> kvp in onDeathItems)
-    {
-      if(kvp.Value > 0)
-      {
-        //Apply the items effect
-      }
-    }
-  }
-
-  private void OnHitEnemy(float procCoeff)
-  {
-    //TODO: Likely need to create a new data type to pass for this
-    //Need to know the damage that was dealth, the running proc coeff and probably some other stuff too
-  }
-  private void OnHitItems()
-  {
-    foreach(KeyValuePair<SO_Item, int> kvp in onHitItems)
-    {
-      if(kvp.Value > 0)
-      {
-        //Apply the item effects if we proc them
-        //TODO: How to find what ability / equipment / item caused this hit - need a running proc coefficnet not static
-        //for instance Ability A PC = 1 Item A PC = 0.5
-      }
-    }
-  }
-
-  #endregion
-
-  #region Money
-  public void UpdateMoney(float amount)
-  {
-    money += amount;
-    UIManager.UpdateMoney(money);
   }
 
   #endregion
 
   #region Helper functions
-  private void InitializeItemInventories()
-  {
-    //Initialize each itemID into the sorted dictionary in order, this way we can be ensured that the items always display / read out in the same order every time
-    //Regardless of order that the player obtains the items
 
-    //Initialize inventory dict for non-equipment items
-    foreach(Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
-    {
-      List<SO_Item> listItems = itemManager.GetAllItemsOfRarity(r);
-      listItems.Sort((x, y) => x.id.CompareTo(y.id));
-
-      foreach(SO_Item i in listItems)
-      {
-        itemInventory[i] = 0;
-        //TODO: Also initialize our on enemy death items and on hit items
-      }
-    }
-  }
 
   #endregion
 }

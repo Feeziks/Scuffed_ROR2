@@ -56,7 +56,9 @@ public class Projectile : MonoBehaviour
   {
     if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
     {
-      other.gameObject.SendMessage("RecieveDamage", 20);
+      //TODO Create accurate damage  type information 
+      DamageType data = new DamageType(20, 1, 0);
+      other.gameObject.SendMessage("RecieveDamage", data);
       gameObject.SetActive(false);
       spawned = false;
     }

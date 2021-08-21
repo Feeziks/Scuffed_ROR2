@@ -319,6 +319,49 @@ MonoBehaviour:
   xSpacing: 10
   xLimit: 800
   ySpacing: 10
+--- !u!1 &197711979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 197711981}
+  - component: {fileID: 197711980}
+  m_Layer: 0
+  m_Name: EventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &197711980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197711979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90addff9c1fff7d4393ba96fa76dcdb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &197711981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197711979}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &245559455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,9 +1243,6 @@ MonoBehaviour:
   controller: {fileID: 1422962636}
   characterData: {fileID: 11400000, guid: cdccc76157d7b304fb75a712e4fab125, type: 2}
   inputs: {fileID: 1422962637}
-  mainCamera: {fileID: 869637486}
-  equipment: {fileID: 0}
-  testOnDeathEffectItem: {fileID: 11400000, guid: 7e5706f78a837c149a2718eb7332fe0b, type: 2}
   groundLayers:
     serializedVersion: 2
     m_Bits: 310
@@ -1210,9 +1250,6 @@ MonoBehaviour:
   fallingGravity: -175
   baseGravity: -25
   cinemachineCameraTarget: {fileID: 1422962629}
-  bottomClamp: 0
-  topClamp: 80
-  cameraAngleOverride: 0
   primaryAbility: {fileID: 11400000, guid: d4db4e75e7a31fd4f83408e2f39adb98, type: 2}
   UIManager: {fileID: 142363073}
   itemManager: {fileID: 480086061}

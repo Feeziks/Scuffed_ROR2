@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
   public MeshRenderer meshRenderer;
   public MeshFilter meshFilter;
 
+  public EventManager eManager;
+
   private bool spawned;
   private float rotationHz = 1f;
 
@@ -73,10 +75,9 @@ public class Item : MonoBehaviour
     //If the other collider is a player give them the item
     if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
     {
-      other.gameObject.SendMessage("OnItemPickup", so_item);
-      transform.parent.SendMessage("OnItemPickup", gameObject);
-      //TODO: Add some particle effect stuff here
-      //TODO: Add some sound stuff here
+      //TODO How to get player number from the collision?
+      OnItemPickupDataClass temp = new OnItemPickupDataClass(so_item, gameObject, 0);
+      eManager.SendMessage("OnItemPickup", temp);
     }
   }
   

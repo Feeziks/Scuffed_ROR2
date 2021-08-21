@@ -24,4 +24,4 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
   procCoeff: 0
   procChance: 1
-  onDeathAction: {fileID: 11400000, guid: cf9de5f5e6ecf7e41b2d5978b4023784, type: 2}
+  onDeathAction: {fileID: 11400000, guid: 46d4087d40cff6149b7f0d7cddb69d2b, type: 2}

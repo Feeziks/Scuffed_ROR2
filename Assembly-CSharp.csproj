@@ -72,15 +72,16 @@
     <Compile Include="Assets\Scripts\Abstractions\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\InputActions\InputHandler.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Character\SO_CharacterData.cs" />
-    <Compile Include="Assets\Scripts\NewItemHeir\SO_ScriptableAction.cs" />
-    <Compile Include="Assets\Scripts\NewItemHeir\OnDeathActions\TestOnDeathAction.cs" />
-    <Compile Include="Assets\Scripts\NewItemHeir\OnHitActions\TestOnHitAction.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_OnDeathEffect.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_OnHitEffect.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_StatModifier.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_Equipment.cs" />
     <Compile Include="Assets\Resources\Items\2_Uncommon\TestUncommonItem_OnHitEffect.cs" />
+    <Compile Include="Assets\Resources\Items\3_Rare\TestOnDeathAction.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\SO_ScriptableAction.cs" />
+    <Compile Include="Assets\Scripts\Managers\EventManager.cs" />
+    <Compile Include="Assets\Scripts\Types.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

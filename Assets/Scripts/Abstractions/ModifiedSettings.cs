@@ -29,8 +29,8 @@ public class ModifiedSettings
     }
   }
 
-  public void ApplyItem(SO_Item item, int num)
+  public void ApplyItem(SO_Item item)
   {
-
+    //TODO: Make the newly gained item apply its changes to the appropriate stat
   }
 }
