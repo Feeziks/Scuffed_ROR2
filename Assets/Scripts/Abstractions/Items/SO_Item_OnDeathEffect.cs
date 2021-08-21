@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Objects/Item - On Death Item Passive")]
-public class SO_Item_OnDeathEffect : SO_Item2
+[CreateAssetMenu(menuName = "Scriptable Objects/Items/Passive - On Death Effect")]
+public class SO_Item_OnDeathEffect : SO_Item
 {
   [Header("Item Specific Stats")]
   public float procCoeff; //Does this effect proc other effects, if so how often

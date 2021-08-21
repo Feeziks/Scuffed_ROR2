@@ -9,23 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
+  m_Script: {fileID: 11500000, guid: af3490dc0c45e5444a9d635d93bd84cd, type: 3}
   m_Name: TestCommonItem
   m_EditorClassIdentifier: 
-  itemName: TestingCommonItem
-  ID:
+  id:
     active: 0
     rarity: 1
     uniqueID: 0
-  shortDescription: An item to test things
-  longDescription: This common item is just here to test things
+  itemName: Test Common Item
+  tooltipDescription: For Testing Item Functionality
+  longDescription: An item that doesnt really need to exist
+  sprite: {fileID: 21300000, guid: 7fbcc26156063d446a2658e5095964e6, type: 3}
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
-  sprite: {fileID: 21300000, guid: 7fbcc26156063d446a2658e5095964e6, type: 3}
-  modifiesStats: 1
-  statModifier: 1
+  statModified: 1
   firstStackModifier: 5
   additionalStackModifier: 5
-  procCoefficent: 0
-  onDeathEffect: 0
-  onHitEffect: 0

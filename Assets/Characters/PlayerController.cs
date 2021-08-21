@@ -10,13 +10,10 @@ public class PlayerController : MonoBehaviour
   public CharacterController controller;
   public SO_CharacterData characterData;
   public InputHandler inputs;
-  public Camera mainCamera;
 
   public SortedDictionary<SO_Item, int> itemInventory;
   public Dictionary<SO_Item, int> onDeathItems;
   public Dictionary<SO_Item, int> onHitItems;
-  public SO_Item equipment;
-  public SO_Item_OnDeathEffect testOnDeathEffectItem;
 
   private ModifiedSettings modSettings;
 
@@ -53,9 +50,9 @@ public class PlayerController : MonoBehaviour
   private bool LockCameraPosition = false;
   private float cinemachineTargetYaw;
   private float cinemachineTargetPitch;
-  public float bottomClamp = 10f;
-  public float topClamp = 80f;
-  public float cameraAngleOverride;
+  private float bottomClamp = 10f;
+  private float topClamp = 80f;
+  private float cameraAngleOverride;
 
   //Health / status
   private float currHealth;
@@ -379,13 +376,6 @@ public class PlayerController : MonoBehaviour
         //Apply the items effect
       }
     }
-
-    //Decide if the item will proc
-    float random = Random.Range(0f, 1f);
-    if(random < testOnDeathEffectItem.procChance)
-    {
-      testOnDeathEffectItem.onDeathAction.PerformAction(enemy);
-    }
   }
 
   private void OnHitEnemy(float procCoeff)
@@ -427,25 +417,14 @@ public class PlayerController : MonoBehaviour
     foreach(Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
     {
       List<SO_Item> listItems = itemManager.GetAllItemsOfRarity(r);
-      listItems.Sort((x, y) => x.ID.CompareTo(y.ID));
+      listItems.Sort((x, y) => x.id.CompareTo(y.id));
 
       foreach(SO_Item i in listItems)
       {
         itemInventory[i] = 0;
-
-        if(i.onDeathEffect)
-        {
-          onDeathItems[i] = 0;
-        }
-
-        if(i.onHitEffect)
-        {
-          onHitItems[i] = 0;
-        }
+        //TODO: Also initialize our on enemy death items and on hit items
       }
     }
-
-    equipment = null;
   }
 
   #endregion

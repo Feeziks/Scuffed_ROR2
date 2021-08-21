@@ -9,23 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 422de0ba85ee6a2499864345eef772b5, type: 3}
   m_Name: TestUncommonItem
   m_EditorClassIdentifier: 
-  itemName: UncommonItemTest
-  ID:
+  id:
     active: 0
     rarity: 2
     uniqueID: 0
-  shortDescription: An uconnom item to test
-  longDescription: Testing uncommon Items
-  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 0}
+  itemName: Test Uncommon Item
+  tooltipDescription: Used for testing Uncommon Items
+  longDescription: Pretty nifty eh
   sprite: {fileID: 21300000, guid: 4eb764204af58bf4f84ea8243c2801d3, type: 3}
-  modifiesStats: 1
-  statModifier: 2
-  firstStackModifier: 0.1
-  additionalStackModifier: 0.1
-  procCoefficent: 0
-  onDeathEffect: 0
-  onHitEffect: 0
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
+  procCoeff: 0.5
+  procChance: 0.5
+  onDeathAction: {fileID: 11400000, guid: 78b6ab8ba808b83449bd91656223431b, type: 2}

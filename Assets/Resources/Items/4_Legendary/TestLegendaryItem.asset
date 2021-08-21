@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
+  m_Script: {fileID: 11500000, guid: af3490dc0c45e5444a9d635d93bd84cd, type: 3}
   m_Name: TestLegendaryItem
   m_EditorClassIdentifier: 
-  itemName: TestLegendaryItem
-  ID:
-    ID: 768
-  shortDescription: Item for legendary test
-  longDescription: Testing legendary items
-  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 0}
+  id:
+    active: 0
+    rarity: 8
+    uniqueID: 0
+  itemName: Test Legendary Item
+  tooltipDescription: Big Ups bruv
+  longDescription: big jumping jumps
   sprite: {fileID: 21300000, guid: 9131ec394d56162419e7b5eca13fe660, type: 3}
-  modifiesStats: 1
-  statModifier: 4096
-  firstStackModifier: 4
-  additionalStackModifier: 4
-  procCoefficent: 0
+  model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
+  statModified: 8
+  firstStackModifier: 1
+  additionalStackModifier: 1

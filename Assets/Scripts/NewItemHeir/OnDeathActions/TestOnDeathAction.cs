@@ -10,6 +10,6 @@ public class TestOnDeathAction : SO_ScriptableAction
     //Just smack a giant cube on top of the thing
     GameObject temp = GameObject.CreatePrimitive(PrimitiveType.Cube);
     temp.transform.localPosition = go.transform.localPosition;
-    temp.transform.localScale = new Vector3(30f, 30f, 30f);
+    temp.transform.localScale = new Vector3(300f, 300f, 300f);
   }
 }

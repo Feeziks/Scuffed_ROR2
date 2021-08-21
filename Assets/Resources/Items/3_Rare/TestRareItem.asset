@@ -9,23 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6fb4f89dade0c04d9f109193fbd5d4b, type: 3}
+  m_Script: {fileID: 11500000, guid: fc6f5137a1040c34ea72bb120266b691, type: 3}
   m_Name: TestRareItem
   m_EditorClassIdentifier: 
-  itemName: RareTestItem
-  ID:
+  id:
     active: 0
     rarity: 4
     uniqueID: 0
-  shortDescription: Rare item for test
-  longDescription: Testing of Rare Items
+  itemName: Test Rare Item
+  tooltipDescription: A Rare testing item
+  longDescription: How did you find me
+  sprite: {fileID: 21300000, guid: cb1f46d26aecd5046aaf941192c40330, type: 3}
   model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   material: {fileID: 2100000, guid: c181c23a6120fbe4aadd5bb53a58dd78, type: 2}
-  sprite: {fileID: 21300000, guid: cb1f46d26aecd5046aaf941192c40330, type: 3}
-  modifiesStats: 1
-  statModifier: 12
-  firstStackModifier: 3
-  additionalStackModifier: 3
-  procCoefficent: 0
-  onDeathEffect: 0
-  onHitEffect: 0
+  procCoeff: 0
+  procChance: 1
+  onDeathAction: {fileID: 11400000, guid: cf9de5f5e6ecf7e41b2d5978b4023784, type: 2}

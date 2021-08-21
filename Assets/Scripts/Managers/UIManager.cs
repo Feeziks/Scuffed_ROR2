@@ -34,11 +34,11 @@ public class UIManager : MonoBehaviour
     foreach (Constants.ItemRarity r in System.Enum.GetValues(typeof(Constants.ItemRarity)))
     {
       List<SO_Item> listItems = player.itemManager.GetAllItemsOfRarity(r);
-      listItems.Sort((x, y) => x.ID.CompareTo(y.ID));
+      listItems.Sort((x, y) => x.id.CompareTo(y.id));
 
       foreach(SO_Item i in listItems)
       {
-        GameObject newGo = new GameObject("Item_" + i.ID.GetID().ToString());
+        GameObject newGo = new GameObject("Item_" + i.id.GetID().ToString());
         RectTransform rt = newGo.AddComponent(typeof(RectTransform)) as RectTransform;
         rt.SetParent(parent, false);
         rt.anchorMin = new Vector2(0f, 0.5f);
@@ -49,10 +49,10 @@ public class UIManager : MonoBehaviour
 
         newGo.SetActive(false);
 
-        itemInventoryToSpriteGameObject[i.ID] = newGo;
-        itemInventoryToRectTransform[i.ID] = rt;
+        itemInventoryToSpriteGameObject[i.id] = newGo;
+        itemInventoryToRectTransform[i.id] = rt;
 
-        GameObject newTextGo = new GameObject("Item_" + i.ID.GetID().ToString() + "_Counter");
+        GameObject newTextGo = new GameObject("Item_" + i.id.GetID().ToString() + "_Counter");
         RectTransform textRt = newTextGo.AddComponent(typeof(RectTransform)) as RectTransform;
         textRt.SetParent(rt, false);
         textRt.anchorMin = new Vector2(1f, 0f);
@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
 
         newTextGo.SetActive(false);
 
-        itemInventoryToText[i.ID] = txt;
+        itemInventoryToText[i.id] = txt;
 
       }      
     }
@@ -80,7 +80,7 @@ public class UIManager : MonoBehaviour
   {
     foreach(KeyValuePair<SO_Item, int> kvp in player.itemInventory)
     {
-      Constants.ItemID id = kvp.Key.ID;
+      Constants.ItemID id = kvp.Key.id;
       if(kvp.Value == 1)
       {
         //First item of this kind picked up -> add its sprite into the item inventory in order of item ID

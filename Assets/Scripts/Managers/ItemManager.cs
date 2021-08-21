@@ -102,7 +102,7 @@ public class ItemManager : MonoBehaviour
     //TODO: There is probably a better way to do this
     foreach(SO_Item i in itemsByRarity[id.GetRarity()])
     {
-      if (i.ID == id)
+      if (i.id == id)
         return i;
     }
 
@@ -155,13 +155,13 @@ public class ItemManager : MonoBehaviour
     foreach(Object item in allItems)
     {
       SO_Item itemCasted = (SO_Item)item;
-      if(itemCasted.ID.active)
+      if(itemCasted.id.active)
       {
         allEquipments.Add(itemCasted);
       }
       else
       {
-        itemsByRarity[itemCasted.ID.rarity].Add(itemCasted);
+        itemsByRarity[itemCasted.id.rarity].Add(itemCasted);
       }
     }
   }
