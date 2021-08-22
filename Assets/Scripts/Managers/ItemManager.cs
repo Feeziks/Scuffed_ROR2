@@ -12,7 +12,6 @@ public class ItemManager : MonoBehaviour
   //But that is likely important so that seeds can remain consistent across every game
 
   private ObjectPool<GameObject> itemPool;
-  private List<GameObject> instantiatedItems;
 
   private Dictionary<Constants.ItemRarity, List<SO_Item>> itemsByRarity;
   private List<SO_Item> allEquipments;
@@ -47,7 +46,6 @@ public class ItemManager : MonoBehaviour
     eManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
     itemPool = new ObjectPool<GameObject>();
-    instantiatedItems = new List<GameObject>();
     InitializeItemPool();
     itemsByRarity = new Dictionary<Constants.ItemRarity, List<SO_Item>>();
     allEquipments = new List<SO_Item>();
@@ -97,14 +95,12 @@ public class ItemManager : MonoBehaviour
     Item thisItem = thisGo.GetComponent(typeof(Item)) as Item;
     thisItem.SetSO_Item(randomItem);
     thisItem.SpawnItem();
-    instantiatedItems.Add(thisGo);
     PlaceItemRandomly(thisGo);
   }
 
   public void SpawnItem()
   {
-    //For now we just want to spawn the test items to show that they work
-    instantiatedItems.Add(itemPool.Get());
+
   }
 
   public void PlaceItemRandomly(GameObject item)
@@ -115,12 +111,6 @@ public class ItemManager : MonoBehaviour
 
   private void OnItemPickup(GameObject go)
   {
-    if(!instantiatedItems.Contains(go))
-    {
-      Debug.LogError("Something went wrong an item not pulled from the item pool was instantiated and picked up by the player");
-      return;
-    }
-
     //Reset the item and return it to the object pool
     Item i = (Item)go.GetComponent(typeof(Item));
     i.ResetItem();
@@ -236,7 +226,7 @@ public class ItemManager : MonoBehaviour
     foreach(SO_Item_OnDeathEffect item in playerOnDeathEffects[data.playerThatKilledEnemy])
     {
       //TODO: Add scaling for when multiple items are held
-      item.onDeathAction.PerformAction(data.enemy);
+      item.onDeathAction.PerformAction(data.enemyGO);
     }
   }
 

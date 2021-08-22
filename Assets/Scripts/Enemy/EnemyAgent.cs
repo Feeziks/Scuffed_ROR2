@@ -8,31 +8,80 @@ public class EnemyAgent : MonoBehaviour
   public SO_EnemyData enemyData;
 
   public NavMeshAgent navMeshAgent;
-  public float speed;
-  public float maxHealth;
   public float currHealth;
 
-  public PlayerController player;
+  public List<PlayerController> players;
 
   public Transform target;
-
+  public MeshFilter mf;
+  public Rigidbody rb;
+  public MeshRenderer mr;
   public EventManager eManager;
+
+  private float reTargetTimer = 0.5f;
+  private float lastRetargetTime;
+
+  private bool spawned;
 
   private void Start()
   {
-    navMeshAgent.speed = speed;
-    currHealth = maxHealth;
+    lastRetargetTime = Time.realtimeSinceStartup;
+    spawned = false;
   }
 
   private void Update()
   {
-    navMeshAgent.SetDestination(target.position);
+    if (spawned)
+    {
+      if (Time.realtimeSinceStartup - lastRetargetTime > reTargetTimer)
+      {
+        lastRetargetTime = Time.realtimeSinceStartup;
+        //Find which player is closest
+        float closestDist = float.MaxValue;
+        foreach (PlayerController player in players)
+        {
+          float distance = Vector3.Distance(transform.position, player.transform.position);
+          if (distance < closestDist)
+          {
+            target = player.transform;
+          }
+        }
+      }
+      navMeshAgent.SetDestination(target.position);
+    }
   }
 
+
+  public void Spawn(SO_EnemyData enemy, Vector3 pos)
+  {
+    enemyData = enemy;
+    transform.position = pos;
+
+    if(enemy.spawnAction != null)
+    {
+      enemy.spawnAction.PerformAction(gameObject);
+    }
+
+    navMeshAgent = gameObject.AddComponent(typeof(NavMeshAgent)) as NavMeshAgent;
+
+    gameObject.SetActive(true);
+
+    navMeshAgent.speed = enemyData.settings.moveSpeed;
+    currHealth = enemyData.settings.maxHealth;
+  }
+
+  public void Reset()
+  {
+    enemyData = null;
+    currHealth = -1;
+    target = null;
+    mr.enabled = false;
+    spawned = false;
+  }
   private void RecieveDamage(DamageType damage)
   {
     currHealth -= damage.value;
-    if(currHealth < 0)
+    if(currHealth <= 0)
     {
       Die(damage);
     }
@@ -45,7 +94,12 @@ public class EnemyAgent : MonoBehaviour
 
   private void Die(DamageType damage)
   {
-    EnemyDeathDataType data = new EnemyDeathDataType(gameObject, damage.value, damage.playerthatDealtDamage);
+    if(enemyData.deathAction != null)
+    {
+      enemyData.deathAction.PerformAction(gameObject);
+    }
+
+    EnemyDeathDataType data = new EnemyDeathDataType(gameObject, enemyData, damage.value, damage.playerthatDealtDamage);
     eManager.SendMessage("OnEnemyDeath", data);
   }
 }

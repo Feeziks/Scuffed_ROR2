@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
   private bool grounded;
   private float groundedOffset = -0.15f; //TODO better way to do this other than guess and check
   private float groundedRadius = 0.8f;
-  private float currJumpHeight;
 
 
   //Velocities
@@ -52,7 +51,11 @@ public class PlayerController : MonoBehaviour
   private float currHealth;
   private Constants.Status status;
 
-  private float money = 30f;
+  private float exp;
+  private float expForNextLevel;
+  private int availableSkillPoints;
+  private float money;
+  private float level;
 
   //Projectile Pool
   public SO_Ability primaryAbility;
@@ -63,11 +66,13 @@ public class PlayerController : MonoBehaviour
   private void OnEnable()
   {
     EventManager.itemPickupEvent += OnItemPickup;
+    EventManager.enemyDeathEvent += OnEnemyDeath;
   }
 
   private void OnDisable()
   {
     EventManager.itemPickupEvent -= OnItemPickup;
+    EventManager.enemyDeathEvent += OnEnemyDeath;
   }
 
 
@@ -82,6 +87,12 @@ public class PlayerController : MonoBehaviour
 
     projectilePool = new ObjectPool<GameObject>();
     InitializeProjectilePool();
+
+    money = 30f;
+    exp = 0f;
+    expForNextLevel = 100f;
+    level = 1;
+    availableSkillPoints = 0;
   }
 
   private void Start()
@@ -246,7 +257,7 @@ public class PlayerController : MonoBehaviour
 
   #endregion
 
-  #region Abilities
+  #region Abilities And EXP
 
   private void AbilitiesCheck()
   {
@@ -319,6 +330,17 @@ public class PlayerController : MonoBehaviour
     }
   }
 
+  private void LevelUp()
+  {
+    //TODO: Proper scaling
+    expForNextLevel *= 2;
+    level += 1;
+    availableSkillPoints += 1;
+
+    //TODO: Give some player feedback that they leveled up 
+    // Some kind of Audio + particle thing probably
+  }
+
   #endregion
 
   #region Items And Item Interactions
@@ -341,6 +363,23 @@ public class PlayerController : MonoBehaviour
     modSettings.sprintMultiplier = characterData.characterSettings.baseSprintSpeedMultiplier;
     modSettings.jumpHeight = characterData.characterSettings.baseJumpHeight;
     modSettings.numJumps = characterData.characterSettings.baseNumberJumps;
+  }
+
+  #endregion
+
+  #region Event Handling
+
+  public void OnEnemyDeath(EnemyDeathDataType data)
+  {
+    //Gain money and EXP for killing enemies
+    //TODO: Apply scaling to these values
+    money += data.enemy.settings.moneyReward;
+    exp += data.enemy.settings.expReward;
+
+    if(exp >= expForNextLevel)
+    {
+      LevelUp();
+    }
   }
 
   #endregion

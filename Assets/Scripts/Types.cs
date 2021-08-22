@@ -5,13 +5,15 @@ using UnityEngine;
 #region Event Data Types
 public class EnemyDeathDataType
 {
-  public GameObject enemy;
+  public GameObject enemyGO;
+  public SO_EnemyData enemy;
   public float finalBlowDamage;
   public int playerThatKilledEnemy;
 
-  public EnemyDeathDataType(GameObject e, float d, int p)
+  public EnemyDeathDataType(GameObject e, SO_EnemyData ed, float d, int p)
   {
-    enemy = e;
+    enemyGO = e;
+    enemy = ed;
     finalBlowDamage = d;
     playerThatKilledEnemy = p;
   }

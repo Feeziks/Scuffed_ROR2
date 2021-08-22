@@ -21,6 +21,18 @@ public class ObjectPool<T> where T : class, new()
     }
   }
 
+  public ObjectPool(int depth)
+  {
+    currentDepth = depth;
+
+    //Initialize the items in the pool
+    for (int i = 0; i < initialDepth; i++)
+    {
+      T temp = new T();
+      pool.Push(temp);
+    }
+  }
+
   public T Get()
   { 
     if(pool.Count == 0)

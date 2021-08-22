@@ -64,24 +64,25 @@
     <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Enemies\SO_EnemySettings.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAgent.cs" />
+    <Compile Include="Assets\Resources\Items\2_Uncommon\TestUncommonItem_OnHitEffect.cs" />
     <Compile Include="Assets\Scripts\Abstractions\ModifiedSettings.cs" />
-    <Compile Include="Assets\Characters\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_OnDeathEffect.cs" />
+    <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Constants.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\SO_ScriptableAction.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts\Managers\ItemManager.cs" />
     <Compile Include="Assets\Scripts\Abstractions\ObjectPool.cs" />
-    <Compile Include="Assets\Scripts\InputActions\InputHandler.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\Character\SO_CharacterData.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_OnDeathEffect.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_OnHitEffect.cs" />
+    <Compile Include="Assets\Scripts\InputActions\InputHandler.cs" />
+    <Compile Include="Assets\Resources\Items\3_Rare\TestOnDeathAction.cs" />
+    <Compile Include="Assets\Scripts\Managers\EventManager.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_StatModifier.cs" />
     <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_Equipment.cs" />
-    <Compile Include="Assets\Resources\Items\2_Uncommon\TestUncommonItem_OnHitEffect.cs" />
-    <Compile Include="Assets\Resources\Items\3_Rare\TestOnDeathAction.cs" />
-    <Compile Include="Assets\Scripts\Abstractions\SO_ScriptableAction.cs" />
-    <Compile Include="Assets\Scripts\Managers\EventManager.cs" />
     <Compile Include="Assets\Scripts\Types.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\Character\SO_CharacterData.cs" />
+    <Compile Include="Assets\Scripts\Abstractions\Items\SO_Item_Equipment.cs" />
+    <Compile Include="Assets\Scripts\Managers\EnemyManager.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
