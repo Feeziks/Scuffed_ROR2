@@ -42,6 +42,7 @@ public class EnemyManager : MonoBehaviour
   {
     if(Time.realtimeSinceStartup - spawnInterval > spawnTimer)
     {
+      spawnTimer = Time.realtimeSinceStartup;
       SpawnEnemy(allEnemies[(int)Random.Range(0f, allEnemies.Count)], new Vector3(Random.Range(-20f, 21f), 20f, Random.Range(-50f, 50f)));
     }
   }
@@ -90,10 +91,12 @@ public class EnemyManager : MonoBehaviour
 
       EnemyAgent ea = go.AddComponent(typeof(EnemyAgent)) as EnemyAgent;
       ea.eManager = eManager;
+      ea.mf = mf;
+      ea.mr = mr;
+      ea.rb = rb;
       ea.enemyData = null;
       ea.players = players;//TODO: Find better way to send enemy manager players
     }
-    Debug.Log("Sucking thing fucks");
   }
 
   public void ReturnEnemyToPool(GameObject go)
@@ -107,7 +110,6 @@ public class EnemyManager : MonoBehaviour
   public void SpawnEnemy(SO_EnemyData enemyToSpawn, Vector3 spawnPosition)
   {
     GameObject go = enemiesPool.Get();
-    go.SetActive(true);
     EnemyAgent ea = go.GetComponent(typeof(EnemyAgent)) as EnemyAgent;
     ea.Spawn(enemyToSpawn, spawnPosition);
   }

@@ -7,7 +7,7 @@ public class EnemyAgent : MonoBehaviour
 {
   public SO_EnemyData enemyData;
 
-  public NavMeshAgent navMeshAgent;
+  //public NavMeshAgent navMeshAgent;
   public float currHealth;
 
   public List<PlayerController> players;
@@ -17,6 +17,9 @@ public class EnemyAgent : MonoBehaviour
   public Rigidbody rb;
   public MeshRenderer mr;
   public EventManager eManager;
+
+  //TODO: DO we need a collider in addition to the rigidbody?
+
 
   private float reTargetTimer = 0.5f;
   private float lastRetargetTime;
@@ -47,7 +50,7 @@ public class EnemyAgent : MonoBehaviour
           }
         }
       }
-      navMeshAgent.SetDestination(target.position);
+      //navMeshAgent.SetDestination(target.position);
     }
   }
 
@@ -62,11 +65,11 @@ public class EnemyAgent : MonoBehaviour
       enemy.spawnAction.PerformAction(gameObject);
     }
 
-    navMeshAgent = gameObject.AddComponent(typeof(NavMeshAgent)) as NavMeshAgent;
-
     gameObject.SetActive(true);
 
-    navMeshAgent.speed = enemyData.settings.moveSpeed;
+    //navMeshAgent.speed = enemyData.settings.moveSpeed;
+    mf.mesh = enemyData.model;
+    mr.enabled = true;
     currHealth = enemyData.settings.maxHealth;
   }
 
