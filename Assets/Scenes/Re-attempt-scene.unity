@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    accuratePlacement: 1
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -606,8 +606,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869637484}
-  m_LocalRotation: {x: 0.29364738, y: -0.0009559122, z: 0.00029364708, w: 0.9559133}
-  m_LocalPosition: {x: 0.5, y: 174.6, z: -250}
+  m_LocalRotation: {x: 0.36286038, y: 0, z: 0, w: 0.9318436}
+  m_LocalPosition: {x: 0, y: 50.9, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -754,10 +754,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
-  VerticalArmLength: 170
+  ShoulderOffset: {x: 0, y: 13, z: 0}
+  VerticalArmLength: 32.9
   CameraSide: 1
-  CameraDistance: 250
+  CameraDistance: 50
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 0
@@ -921,8 +921,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1096206993}
-  m_LocalRotation: {x: 0.29364738, y: -0.0009559122, z: 0.00029364708, w: 0.9559133}
-  m_LocalPosition: {x: 0.5, y: 174.6, z: -250}
+  m_LocalRotation: {x: 0.36286038, y: 0, z: 0, w: 0.9318436}
+  m_LocalPosition: {x: 0, y: 50.9, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 983997425}

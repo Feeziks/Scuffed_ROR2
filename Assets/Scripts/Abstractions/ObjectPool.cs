@@ -38,6 +38,7 @@ public class ObjectPool<T> where T : class, new()
     if(pool.Count == 0)
     {
       ResizePool();
+      return null;
     }
 
     return pool.Pop();
